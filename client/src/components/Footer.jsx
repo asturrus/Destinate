@@ -10,23 +10,23 @@ export function Footer() {
   ];
 
   const footerLinks = {
-    product: [
-      { name: "Features", href: "#features" },
-      { name: "Pricing", href: "#pricing" },
-      { name: "Documentation", href: "#docs" },
-      { name: "API", href: "#api" }
+    destinations: [
+      { name: "Popular Destinations", href: "#features" },
+      { name: "City Guides", href: "#guides" },
+      { name: "Travel Packages", href: "#packages" },
+      { name: "Seasonal Deals", href: "#deals" }
     ],
     company: [
-      { name: "About", href: "#about" },
-      { name: "Blog", href: "#blog" },
-      { name: "Careers", href: "#careers" },
-      { name: "Contact", href: "#contact" }
+      { name: "About Destinate", href: "#about" },
+      { name: "Travel Blog", href: "#blog" },
+      { name: "Partner With Us", href: "#partners" },
+      { name: "Contact Support", href: "#contact" }
     ],
     resources: [
-      { name: "Community", href: "#community" },
-      { name: "Help Center", href: "#help" },
-      { name: "Status", href: "#status" },
-      { name: "Security", href: "#security" }
+      { name: "Travel Tips", href: "#tips" },
+      { name: "Trip Planning", href: "#planning" },
+      { name: "Travel Insurance", href: "#insurance" },
+      { name: "Visa Information", href: "#visa" }
     ]
   };
 
@@ -62,18 +62,18 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Product Links */}
+          {/* Destinations Links */}
           <div>
-            <h4 className="font-semibold text-foreground mb-4" data-testid="text-footer-product-title">
-              Product
+            <h4 className="font-semibold text-foreground mb-4" data-testid="text-footer-destinations-title">
+              Destinations
             </h4>
             <ul className="space-y-2">
-              {footerLinks.product.map((link) => (
+              {footerLinks.destinations.map((link) => (
                 <li key={link.name}>
                   <a
                     href={link.href}
                     className="text-muted-foreground hover:text-foreground transition-colors"
-                    data-testid={`link-footer-product-${link.name.toLowerCase()}`}
+                    data-testid={`link-footer-destinations-${link.name.toLowerCase().replace(/\s+/g, '-')}`}
                   >
                     {link.name}
                   </a>
