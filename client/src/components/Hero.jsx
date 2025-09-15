@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Play } from "lucide-react";
+import { ArrowRight, Map } from "lucide-react";
 import heroBackground from "@assets/generated_images/Modern_hero_background_gradient_fbe282f2.png";
 
 export function Hero() {
@@ -24,8 +24,7 @@ export function Hero() {
         </h1>
         
         <p className="text-xl sm:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto" data-testid="text-hero-description">
-          Create beautiful, responsive web applications with the power of React and the flexibility of Tailwind CSS. 
-          Start building your next project today.
+          With Destinate, you can plan your trip in no time. We provide you with the best activites and attractions suggested by travelers!
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -44,7 +43,7 @@ export function Hero() {
             className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm"
             data-testid="button-hero-watch-demo"
           >
-            <Play className="mr-2 h-5 w-5" />
+            <Map className="mr-2 h-5 w-5" />
             Watch Demo
           </Button>
         </div>
