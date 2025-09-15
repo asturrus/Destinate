@@ -46,7 +46,7 @@ export function Header() {
               Sign In
             </Button>
             <Button data-testid="button-get-started">
-              Get Started
+              Plan your trip
             </Button>
             <ThemeToggle />
           </div>
