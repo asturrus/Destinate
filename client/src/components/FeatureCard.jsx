@@ -1,14 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { LucideIcon } from "lucide-react";
 
-interface FeatureCardProps {
-  icon: LucideIcon;
-  title: string;
-  description: string;
-  className?: string;
-}
-
-export function FeatureCard({ icon: Icon, title, description, className = "" }: FeatureCardProps) {
+export function FeatureCard({ icon: Icon, title, description, className = "" }) {
   return (
     <Card className={`hover-elevate transition-all duration-200 ${className}`} data-testid={`card-feature-${title.toLowerCase().replace(/\s+/g, '-')}`}>
       <CardContent className="p-6">
