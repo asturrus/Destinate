@@ -40,7 +40,7 @@ export function Footer() {
               Destinate
             </h3>
             <p className="text-muted-foreground mb-6" data-testid="text-footer-description">
-              Building the future of web development with React and Tailwind CSS.
+              Planning your trip has never been easier. Set up your itinerary with today!
             </p>
             
             {/* Social Links */}
