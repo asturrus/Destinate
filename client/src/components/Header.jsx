@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "./ThemeToggle";
 
 export function Header() {
   const navigation = [
@@ -35,6 +36,7 @@ export function Header() {
 
           {/* Right side items */}
           <div className="flex items-center space-x-4">
+            <ThemeToggle />
             <Button variant="ghost" data-testid="button-sign-in">
               Sign In
             </Button>

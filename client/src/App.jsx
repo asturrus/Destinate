@@ -1,4 +1,5 @@
 import { Switch, Route } from "wouter";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import Home from "@/pages/Home";
 
 function Router() {
@@ -11,7 +12,11 @@ function Router() {
 }
 
 function App() {
-  return <Router />;
+  return (
+    <ThemeProvider defaultTheme="light">
+      <Router />
+    </ThemeProvider>
+  );
 }
 
 export default App;
