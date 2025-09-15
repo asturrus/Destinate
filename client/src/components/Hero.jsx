@@ -17,7 +17,7 @@ export function Hero() {
       {/* Content */}
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h1 className="text-4xl sm:text-6xl font-bold text-white mb-6" data-testid="text-hero-title">
-          Build Amazing Apps with{" "}
+          Hello {" "}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
             React & Tailwind
           </span>
