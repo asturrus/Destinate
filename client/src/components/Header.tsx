@@ -20,7 +20,7 @@ export function Header() {
           {/* Logo */}
           <div className="flex-shrink-0">
             <span className="text-2xl font-bold text-primary" data-testid="text-logo">
-              ReactApp
+              Destinate
             </span>
           </div>
 

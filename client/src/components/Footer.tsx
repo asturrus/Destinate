@@ -37,7 +37,7 @@ export function Footer() {
           {/* Company Info */}
           <div className="col-span-1">
             <h3 className="text-2xl font-bold text-primary mb-4" data-testid="text-footer-logo">
-              ReactApp
+              Destinate
             </h3>
             <p className="text-muted-foreground mb-6" data-testid="text-footer-description">
               Building the future of web development with React and Tailwind CSS.
@@ -127,7 +127,7 @@ export function Footer() {
         <div className="mt-12 pt-8 border-t border-border">
           <div className="flex flex-col sm:flex-row justify-between items-center">
             <p className="text-muted-foreground" data-testid="text-footer-copyright">
-              © 2024 ReactApp. All rights reserved.
+              © 2024 Destinate. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 sm:mt-0">
               <a href="#privacy" className="text-muted-foreground hover:text-foreground transition-colors" data-testid="link-footer-privacy">
