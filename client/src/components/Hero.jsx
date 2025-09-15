@@ -50,17 +50,17 @@ export function Hero() {
         
         {/* Stats */}
         <div className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-8 text-white">
-          <div className="text-center" data-testid="stat-developers">
-            <div className="text-3xl font-bold">10K+</div>
-            <div className="text-gray-300">Developers</div>
+          <div className="text-center" data-testid="stat-countries">
+            <div className="text-3xl font-bold">20+</div>
+            <div className="text-gray-300">Popular Countries</div>
           </div>
-          <div className="text-center" data-testid="stat-projects">
-            <div className="text-3xl font-bold">50K+</div>
-            <div className="text-gray-300">Projects Built</div>
+          <div className="text-center" data-testid="stat-users">
+            <div className="text-3xl font-bold">n</div>
+            <div className="text-gray-300">Users</div>
           </div>
-          <div className="text-center" data-testid="stat-companies">
-            <div className="text-3xl font-bold">500+</div>
-            <div className="text-gray-300">Companies</div>
+          <div className="text-center" data-testid="stat-activities">
+            <div className="text-3xl font-bold">1000+</div>
+            <div className="text-gray-300">Activities</div>
           </div>
         </div>
       </div>
