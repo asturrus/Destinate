@@ -44,7 +44,7 @@ export function Hero() {
             data-testid="button-hero-watch-demo"
           >
             <Map className="mr-2 h-5 w-5" />
-            Watch Demo
+            Interactive Map
           </Button>
         </div>
         
