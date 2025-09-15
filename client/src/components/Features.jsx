@@ -60,6 +60,7 @@ export function Features() {
               icon={location.icon}
               title={location.title}
               description={location.description}
+              backgroundImage={location.backgroundImage}
             />
           ))}
         </div>
