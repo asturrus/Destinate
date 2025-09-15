@@ -7,6 +7,8 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import Home from "@/pages/Home";
 import NotFound from "@/pages/not-found";
 
+console.log("App.jsx loaded successfully");
+
 function Router() {
   return (
     <Switch>
@@ -18,6 +20,7 @@ function Router() {
 }
 
 function App() {
+  console.log("App component rendering");
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>

@@ -4,6 +4,7 @@ import { Features } from "@/components/Features";
 import { Footer } from "@/components/Footer";
 
 export default function Home() {
+  console.log("Home component rendering");
   return (
     <div className="min-h-screen bg-background">
       <Header />
