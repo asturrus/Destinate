@@ -7,37 +7,37 @@ export function Features() {
       icon: Building2,
       title: "Tokyo, Japan",
       description: "Experience the perfect blend of ancient tradition and cutting-edge technology in Japan's vibrant capital city.",
-      backgroundImage: "https://cdn.pixabay.com/photo/2020/04/29/10/16/tokyo-5107832_1280.jpg" // Tokyo night skyline
+      backgroundGradient: "bg-gradient-to-br from-rose-500 via-purple-600 to-indigo-800" // Tokyo neon lights
     },
     {
       icon: Waves,
       title: "Venice, Italy",
       description: "Navigate romantic canals and discover Renaissance art in this unique floating city of bridges and gondolas.",
-      backgroundImage: "https://cdn.pixabay.com/photo/2016/11/29/12/30/gondolier-1869380_1280.jpg" // Venice canal at night
+      backgroundGradient: "bg-gradient-to-br from-blue-600 via-teal-700 to-green-800" // Venice canals
     },
     {
       icon: Crown,
       title: "Paris, France",
       description: "Fall in love with the City of Light, from the iconic Eiffel Tower to world-class museums and charming cafés.",
-      backgroundImage: "https://cdn.pixabay.com/photo/2018/08/16/09/30/paris-3610492_1280.jpg" // Paris Eiffel Tower at night
+      backgroundGradient: "bg-gradient-to-br from-yellow-500 via-orange-600 to-pink-700" // Paris golden lights
     },
     {
       icon: MapPin,
       title: "London, England",
       description: "Explore centuries of history, royal palaces, and modern culture in Britain's cosmopolitan capital.",
-      backgroundImage: "https://cdn.pixabay.com/photo/2016/11/29/09/32/london-1868627_1280.jpg" // London Big Ben at night
+      backgroundGradient: "bg-gradient-to-br from-gray-600 via-blue-700 to-slate-900" // London evening fog
     },
     {
       icon: Church,
       title: "Amsterdam, Netherlands",
       description: "Cycle through picturesque canals, visit world-renowned museums, and enjoy the laid-back Dutch lifestyle.",
-      backgroundImage: "https://cdn.pixabay.com/photo/2016/12/15/12/24/amsterdam-1909003_1280.jpg" // Amsterdam canals at night
+      backgroundGradient: "bg-gradient-to-br from-orange-500 via-red-600 to-purple-800" // Amsterdam sunset
     },
     {
       icon: Mountain,
       title: "Santorini, Greece",
       description: "Witness breathtaking sunsets over whitewashed buildings and crystal-clear waters in this Aegean paradise.",
-      backgroundImage: "https://cdn.pixabay.com/photo/2016/04/18/22/05/santorini-1338086_1280.jpg" // Santorini at night
+      backgroundGradient: "bg-gradient-to-br from-blue-400 via-purple-500 to-pink-600" // Santorini sunset
     }
   ];
 
@@ -60,7 +60,7 @@ export function Features() {
               icon={location.icon}
               title={location.title}
               description={location.description}
-              backgroundImage={location.backgroundImage}
+              backgroundGradient={location.backgroundGradient}
             />
           ))}
         </div>
