@@ -5,8 +5,8 @@ export function Header() {
   const navigation = [
     { name: 'Home', href: '#' },
     { name: 'Destinations', href: '#features' },
+    { name: 'Forum', href: '#about' },
     { name: 'About', href: '#about' },
-    { name: 'Contact', href: '#contact' },
   ];
 
   return (
