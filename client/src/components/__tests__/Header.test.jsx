@@ -43,9 +43,9 @@ describe('Header Component', () => {
   it('navigation links have correct href attributes', () => {
     render(<Header />)
     
-    expect(screen.getByTestId('link-nav-home')).toHaveAttribute('href', '#')
+    expect(screen.getByTestId('link-nav-home')).toHaveAttribute('href', '/')
+    expect(screen.getByTestId('link-nav-forum')).toHaveAttribute('href', '/forum')
     expect(screen.getByTestId('link-nav-destinations')).toHaveAttribute('href', '#features')
-    expect(screen.getByTestId('link-nav-forum')).toHaveAttribute('href', '#about')
     expect(screen.getByTestId('link-nav-about')).toHaveAttribute('href', '#about')
   })
 
