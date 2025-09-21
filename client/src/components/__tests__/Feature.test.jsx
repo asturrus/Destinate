@@ -5,16 +5,17 @@ describe('Features Component', () => {
   test('renders all destination cards', () => {
       render(<Features />)
 
-      // Test for popular destinations
-      expect(screen.getByText('Tokyo')).toBeInTheDocument()
-      expect(screen.getByText('Venice')).toBeInTheDocument()
-      expect(screen.getByText('Paris')).toBeInTheDocument()
-      expect(screen.getByText('London')).toBeInTheDocument()
-      expect(screen.getByText('Amsterdam')).toBeInTheDocument()
-      expect(screen.getByText('Santorini')).toBeInTheDocument()
+       // Test for popular destinations
+      expect(screen.getByText('Tokyo, Japan')).toBeInTheDocument()
+      expect(screen.getByText('Venice, Italy')).toBeInTheDocument()
+      expect(screen.getByText('Paris, France')).toBeInTheDocument()
+      expect(screen.getByText('London, England')).toBeInTheDocument()
+      expect(screen.getByText('Amsterdam, Netherlands')).toBeInTheDocument()
+      expect(screen.getByText('Santorini, Greece')).toBeInTheDocument()
+
     })
     test('renders section heading', () => {
       render(<Features />)
-      expect(screen.getByTestId('text-features-title')).toBeInTheDocument()
+      expect(screen.getByTestId('text-locations-title')).toBeInTheDocument()
     })
   })
