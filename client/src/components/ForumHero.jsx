@@ -28,10 +28,27 @@ export function ForumHero() {
           </div>
 
           {/*Popular Destinations*/}
-          <div className="">
-            <h2 className="">
+          <div className="py-20 px-6">
+            <h2 className="text-xl md:text-2xl font-bold mb-6 text-center">
               Popular Destinations
             </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-6">
+              {destinations.map((dest, i) => (
+                <div
+                  key={i}
+                  className="bg-grey rounded-xl shadow hover:shadow-lg transition overflow-hidden"
+                >
+                  <img
+                    src={dest.img}
+                    alt={dest.name}
+                    className="w-full h-40 object-cover"
+                  />
+                  <div className="p-4 text-center">
+                    <h3 className="text-lg font-semibold">{dest.name}</h3>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
       );
