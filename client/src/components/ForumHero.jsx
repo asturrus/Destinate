@@ -36,7 +36,7 @@ export function ForumHero() {
               {destinations.map((dest, i) => (
                 <div
                   key={i}
-                  className="bg-grey rounded-xl shadow hover:shadow-lg transition overflow-hidden"
+                  className="bg-dark rounded-xl shadow hover:shadow-lg transition overflow-hidden"
                 >
                   <img
                     src={dest.img}
