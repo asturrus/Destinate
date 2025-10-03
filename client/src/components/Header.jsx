@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./ThemeToggle";
+import { Link } from "wouter";
 
 export function Header() {
   const navigation = [
@@ -37,8 +38,8 @@ export function Header() {
           {/* Right side items */}
           <div className="flex items-center space-x-4">
             <ThemeToggle />
-            <Button variant="ghost" data-testid="button-sign-in">
-              Sign In
+            <Button variant="ghost" data-testid="button-sign-in" asChild>
+              <Link href="/signin">Sign In</Link>
             </Button>
             <Button data-testid="button-get-started">
               Plan your trip
