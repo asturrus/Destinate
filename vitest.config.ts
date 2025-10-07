@@ -13,6 +13,13 @@ export default defineConfig({
         resources: 'usable',
       },
     },
+    deps: {
+      optimizer: {
+        web: {
+          include: ['webidl-conversions', 'whatwg-url']
+        }
+      }
+    },
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
