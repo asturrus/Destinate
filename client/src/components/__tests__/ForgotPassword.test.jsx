@@ -37,6 +37,8 @@ describe('ForgotPassword Page', () => {
   });
 
   it('prevents submission with invalid email', async () => {
+    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    
     render(<ForgotPassword />);
     
     const emailInput = screen.getByTestId('input-email');
@@ -45,11 +47,15 @@ describe('ForgotPassword Page', () => {
     fireEvent.change(emailInput, { target: { value: 'invalid-email' } });
     fireEvent.click(submitButton);
     
-    // The form should not submit
+    // The form should show validation error and not submit
     await waitFor(() => {
-      expect(emailInput).toHaveValue('invalid-email');
+      expect(screen.getByText('Please enter a valid email address')).toBeInTheDocument();
       expect(screen.getByTestId('text-title')).toHaveTextContent('Forgot your password?');
     });
+    
+    // Verify console.log was not called (form didn't submit)
+    expect(consoleSpy).not.toHaveBeenCalled();
+    consoleSpy.mockRestore();
   });
 
   it('renders link back to sign in page', () => {

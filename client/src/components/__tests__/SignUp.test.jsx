@@ -50,6 +50,8 @@ describe('SignUp Page', () => {
   });
 
   it('prevents submission with invalid email', async () => {
+    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    
     render(<SignUp />);
     
     const nameInput = screen.getByTestId('input-name');
@@ -64,10 +66,14 @@ describe('SignUp Page', () => {
     fireEvent.change(confirmPasswordInput, { target: { value: 'password123' } });
     fireEvent.click(submitButton);
     
-    // The form should not submit
+    // The form should show validation error and not submit
     await waitFor(() => {
-      expect(emailInput).toHaveValue('invalid-email');
+      expect(screen.getByText('Please enter a valid email address')).toBeInTheDocument();
     });
+    
+    // Verify console.log was not called (form didn't submit)
+    expect(consoleSpy).not.toHaveBeenCalled();
+    consoleSpy.mockRestore();
   });
 
   it('displays validation error for short password', async () => {

@@ -2,6 +2,12 @@ import { render, screen } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
 import { Header } from '../Header'
 
+// Mock wouter
+vi.mock('wouter', () => ({
+  Link: ({ href, children }) => <a href={href}>{children}</a>,
+  useLocation: () => ['/', vi.fn()],
+}))
+
 // Mock the ThemeToggle component since it might have complex dependencies
 vi.mock('../ThemeToggle', () => ({
   ThemeToggle: () => <button data-testid="button-theme-toggle">Theme Toggle</button>
@@ -60,6 +66,13 @@ describe('Header Component', () => {
     
     expect(getStartedButton).toBeInTheDocument()
     expect(getStartedButton).toHaveTextContent('Plan your trip')
+  })
+
+  it('Sign In button links to /signin page', () => {
+    render(<Header />)
+    
+    const signInButton = screen.getByTestId('button-sign-in')
+    expect(signInButton.closest('a')).toHaveAttribute('href', '/signin')
   })
 
   it('renders theme toggle component', () => {
