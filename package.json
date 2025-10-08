@@ -10,11 +10,11 @@
     "check": "tsc",
     "db:push": "drizzle-kit push",
     "test": "vitest run",
-        "test:watch": "vitest",
-        "test:ui": "vitest --ui",
-        "test:coverage": "vitest run --coverage",
-        "test:header": "vitest run client/src/components/__tests__/Header.test.jsx",
-        "test:features": "vitest run client/src/components/__tests__/Feature.test.jsx"    
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage",
+    "test:header": "vitest run client/src/components/__tests__/Header.test.jsx",
+    "test:features": "vitest run client/src/components/__tests__/Feature.test.jsx"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -64,6 +64,7 @@
     "express": "^4.21.2",
     "express-session": "^1.18.1",
     "framer-motion": "^11.13.1",
+    "happy-dom": "^19.0.2",
     "input-otp": "^1.4.2",
     "jsdom": "^27.0.0",
     "lucide-react": "^0.453.0",
