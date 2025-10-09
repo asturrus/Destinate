@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import { ForumHero } from "../components/ForumHero";
+import { ForumHero } from "../ForumHero";
 import { it } from "node:test";
 
 describe("ForumHero", () => {
