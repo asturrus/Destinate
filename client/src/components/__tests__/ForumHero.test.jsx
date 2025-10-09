@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@test-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { ForumHero } from "../components/ForumHero";
 import { it } from "node:test";
 
