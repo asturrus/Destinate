@@ -1,0 +1,84 @@
+RUN  v3.2.4 /home/runner/work/Destinate/Destinate
+
+⎯⎯⎯⎯⎯⎯ Unhandled Errors ⎯⎯⎯⎯⎯⎯
+
+Vitest caught 5 unhandled errors during the test run.
+This might cause false positive tests. Resolve unhandled errors to make sure your tests are not affected.
+
+⎯⎯⎯⎯⎯⎯ Unhandled Error ⎯⎯⎯⎯⎯⎯⎯
+TypeError: Cannot read properties of undefined (reading 'get')
+ ❯ Object.<anonymous> node_modules/webidl-conversions/lib/index.js:325:94
+ ❯ Module._compile node:internal/modules/cjs/loader:1364:14
+ ❯ Object.Module._extensions..js node:internal/modules/cjs/loader:1422:10
+ ❯ Module.load node:internal/modules/cjs/loader:1203:32
+ ❯ Function.Module._load node:internal/modules/cjs/loader:1019:12
+ ❯ Module.require node:internal/modules/cjs/loader:1231:19
+ ❯ require node:internal/modules/helpers:177:18
+ ❯ Object.<anonymous> node_modules/whatwg-url/lib/URL.js:3:21
+ ❯ Module._compile node:internal/modules/cjs/loader:1364:14
+ ❯ Object.Module._extensions..js node:internal/modules/cjs/loader:1422:10
+
+
+⎯⎯⎯⎯⎯⎯ Unhandled Error ⎯⎯⎯⎯⎯⎯⎯
+TypeError: Cannot read properties of undefined (reading 'get')
+ ❯ Object.<anonymous> node_modules/webidl-conversions/lib/index.js:325:94
+ ❯ Module._compile node:internal/modules/cjs/loader:1364:14
+ ❯ Object.Module._extensions..js node:internal/modules/cjs/loader:1422:10
+ ❯ Module.load node:internal/modules/cjs/loader:1203:32
+ ❯ Function.Module._load node:internal/modules/cjs/loader:1019:12
+ ❯ Module.require node:internal/modules/cjs/loader:1231:19
+ ❯ require node:internal/modules/helpers:177:18
+ ❯ Object.<anonymous> node_modules/whatwg-url/lib/URL.js:3:21
+ ❯ Module._compile node:internal/modules/cjs/loader:1364:14
+ ❯ Object.Module._extensions..js node:internal/modules/cjs/loader:1422:10
+
+
+⎯⎯⎯⎯⎯⎯ Unhandled Error ⎯⎯⎯⎯⎯⎯⎯
+TypeError: Cannot read properties of undefined (reading 'get')
+ ❯ Object.<anonymous> node_modules/webidl-conversions/lib/index.js:325:94
+ ❯ Module._compile node:internal/modules/cjs/loader:1364:14
+ ❯ Object.Module._extensions..js node:internal/modules/cjs/loader:1422:10
+ ❯ Module.load node:internal/modules/cjs/loader:1203:32
+ ❯ Function.Module._load node:internal/modules/cjs/loader:1019:12
+ ❯ Module.require node:internal/modules/cjs/loader:1231:19
+ ❯ require node:internal/modules/helpers:177:18
+ ❯ Object.<anonymous> node_modules/whatwg-url/lib/URL.js:3:21
+ ❯ Module._compile node:internal/modules/cjs/loader:1364:14
+ ❯ Object.Module._extensions..js node:internal/modules/cjs/loader:1422:10
+
+
+⎯⎯⎯⎯⎯⎯ Unhandled Error ⎯⎯⎯⎯⎯⎯⎯
+TypeError: Cannot read properties of undefined (reading 'get')
+ ❯ Object.<anonymous> node_modules/webidl-conversions/lib/index.js:325:94
+ ❯ Module._compile node:internal/modules/cjs/loader:1364:14
+ ❯ Object.Module._extensions..js node:internal/modules/cjs/loader:1422:10
+ ❯ Module.load node:internal/modules/cjs/loader:1203:32
+ ❯ Function.Module._load node:internal/modules/cjs/loader:1019:12
+ ❯ Module.require node:internal/modules/cjs/loader:1231:19
+ ❯ require node:internal/modules/helpers:177:18
+ ❯ Object.<anonymous> node_modules/whatwg-url/lib/URL.js:3:21
+ ❯ Module._compile node:internal/modules/cjs/loader:1364:14
+ ❯ Object.Module._extensions..js node:internal/modules/cjs/loader:1422:10
+
+
+⎯⎯⎯⎯⎯⎯ Unhandled Error ⎯⎯⎯⎯⎯⎯⎯
+TypeError: Cannot read properties of undefined (reading 'get')
+ ❯ Object.<anonymous> node_modules/webidl-conversions/lib/index.js:325:94
+ ❯ Module._compile node:internal/modules/cjs/loader:1364:14
+ ❯ Object.Module._extensions..js node:internal/modules/cjs/loader:1422:10
+ ❯ Module.load node:internal/modules/cjs/loader:1203:32
+ ❯ Function.Module._load node:internal/modules/cjs/loader:1019:12
+ ❯ Module.require node:internal/modules/cjs/loader:1231:19
+ ❯ require node:internal/modules/helpers:177:18
+ ❯ Object.<anonymous> node_modules/whatwg-url/lib/URL.js:3:21
+ ❯ Module._compile node:internal/modules/cjs/loader:1364:14
+ ❯ Object.Module._extensions..js node:internal/modules/cjs/loader:1422:10
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+
+
+ Test Files   (5)
+      Tests  no tests
+     Errors  5 errors
+   Start at  23:45:20
+   Duration  740ms (transform 13ms, setup 0ms, collect 0ms, tests 0ms, environment 0ms, prepare 0ms)
