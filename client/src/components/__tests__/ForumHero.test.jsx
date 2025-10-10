@@ -1,11 +1,11 @@
 import { render, screen, fireEvent } from "@testing-library/react";
+import { describe, it, expect } from "vitest";
 import { ForumHero } from "../ForumHero";
-import { it } from "node:test";
 
 describe("ForumHero", () => {
     it("renders title correctly", () => {
         render(<ForumHero />);
-        expect(screen.getByText("Search For Places")).toBeInTheDocument();
+        expect(screen.getByText("Search for Places")).toBeInTheDocument();
     });
 
     it("renders search bar and button", () => {
