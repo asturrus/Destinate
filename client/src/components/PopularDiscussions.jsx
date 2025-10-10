@@ -1,12 +1,20 @@
+import { useState } from "react";
 import { DiscussionCard } from "@/components/DiscussionCard";
+import { DiscussionPage } from "@/components/DiscussionPage";
 
 export function PopularDiscussions() {
+  const [selected, setSelected] = useState(null);
+
   const discussions = [
     { title: "Best food spots in Tokyo?", author: "Ethan", replies: 12, date: "Sep 20" },
     { title: "Hidden gems in Venice canals", author: "Ethan", replies: 5, date: "Sep 19" },
     { title: "Romantic places in Paris", author: "Ethan", replies: 9, date: "Sep 18" },
     { title: "Budget travel tips for London", author: "Ethan", replies: 7, date: "Sep 17" },
   ];
+
+  if (selected) {
+    return <DiscussionPage discussion={selected} onBack={() => setSelected(null)}/>;
+  }
 
   return (
     <section className="py-12 px-6">
