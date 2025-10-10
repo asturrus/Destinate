@@ -25,10 +25,8 @@ export function PopularDiscussions() {
         {discussions.map((disc, i) => (
           <DiscussionCard
             key={i}
-            title={disc.title}
-            author={disc.author}
-            replies={disc.replies}
-            date={disc.date}
+            discussion={disc}
+            onClick={() => setSelected(disc)}
           />
         ))}
       </div>
