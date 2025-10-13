@@ -170,8 +170,9 @@ export function calculateDistance(
 }
 
 // Get random destination
-export function getRandomDestination(excludeIds: string[] = []): Destination {
+export function getRandomDestination(excludeIds: string[] = []): Destination | null {
   const available = destinations.filter(d => !excludeIds.includes(d.id));
+  if (available.length === 0) return null;
   return available[Math.floor(Math.random() * available.length)];
 }
 

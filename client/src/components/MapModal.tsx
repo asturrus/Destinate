@@ -31,9 +31,11 @@ export function MapModal({ open, onOpenChange }: MapModalProps) {
 
   const handleSurpriseMe = () => {
     const randomDest = getRandomDestination(selectedDestinations);
-    setInspirationDestination(randomDest);
-    setHighlightedDestination(randomDest.id);
-    setActiveTab('inspire');
+    if (randomDest) {
+      setInspirationDestination(randomDest);
+      setHighlightedDestination(randomDest.id);
+      setActiveTab('inspire');
+    }
   };
 
   const clearTripPlan = () => {
@@ -88,7 +90,7 @@ export function MapModal({ open, onOpenChange }: MapModalProps) {
 
             {/* Side Panel */}
             <div className="w-96 border-l flex flex-col">
-              <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)} className="flex-1 flex flex-col">
+              <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v as 'explore' | 'planner' | 'inspire')} className="flex-1 flex flex-col">
                 <TabsList className="grid w-full grid-cols-3 rounded-none border-b">
                   <TabsTrigger value="explore" data-testid="tab-explore">
                     <Info className="h-4 w-4 mr-2" />
@@ -246,7 +248,26 @@ export function MapModal({ open, onOpenChange }: MapModalProps) {
                         </p>
                       </div>
 
-                      {inspirationDestination ? (
+                      {selectedDestinations.length === destinations.length ? (
+                        <Card>
+                          <CardContent className="p-6 text-center">
+                            <Sparkles className="h-12 w-12 mx-auto mb-3 text-muted-foreground" />
+                            <p className="text-sm text-muted-foreground mb-4">
+                              You've selected all destinations! Remove some from your trip to discover more.
+                            </p>
+                            <Button 
+                              variant="outline" 
+                              onClick={() => {
+                                setSelectedDestinations([]);
+                                setActiveTab('explore');
+                              }}
+                              data-testid="button-clear-all"
+                            >
+                              Clear All Destinations
+                            </Button>
+                          </CardContent>
+                        </Card>
+                      ) : inspirationDestination ? (
                         <Card data-testid="card-inspiration-result">
                           <CardHeader className="p-4">
                             <CardTitle className="text-lg">
