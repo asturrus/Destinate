@@ -17,6 +17,12 @@ export function DiscussionPage( { discussion, onBack } ) {
             <p className="text-gray-500 mb-6">
                 {discussion.date}
             </p>
+
+            <div className="bg-white p-4 rounded shadow">
+                <p>
+                    This is where the body of the discussion goes.
+                </p>
+            </div>
         </div>
     );
 }

@@ -5,6 +5,7 @@ import { NewDiscussionForm } from "@/components/NewDiscussionForm";
 
 export function PopularDiscussions() {
   const [selected, setSelected] = useState(null);
+  const [showForm, setShowForm] = useState(false);
   const [discussions, setDiscussions] = useState([
     { title: "Best food spots in Tokyo?", author: "Ethan", replies: 12, date: "Sep 20" },
     { title: "Hidden gems in Venice canals", author: "Ethan", replies: 5, date: "Sep 19" },
@@ -14,6 +15,7 @@ export function PopularDiscussions() {
 
   const addDiscussion = (newDiscussion) => {
     setDiscussions([newDiscussion, ...discussions]);
+    setShowForm(false);
   };
 
   // const discussions = [
@@ -29,11 +31,19 @@ export function PopularDiscussions() {
 
   return (
     <section className="py-12 px-6">
-      <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">
-        Popular Discussions
-      </h2>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">
+          Popular Discussions
+        </h2>
+        <button
+          onClick={() => setShowForm(!showForm)}
+          className="bg-indigo-600 text-white px-4 py-2 rounded-lg shadow hover:bg-indigo-500 transition"
+        >
+          {showForm ? "Cancel" : "+ New Post"}
+        </button>
+      </div>
 
-      <newDiscussionForm onAddDiscussion={addDiscussion} />
+      {showForm && <NewDiscussionForm onAddDiscussion={addDiscussion} />}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {discussions.map((disc, i) => (
