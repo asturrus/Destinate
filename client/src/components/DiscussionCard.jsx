@@ -9,13 +9,13 @@ export function DiscussionCard({ discussion, onClick }) {
         onClick={onClick}
         className="bg-white rounded-xl shadow hover:shadow-lg transition p-4 cursor-pointer"
       >
-        <h3>
+        <h3 className="text-lg font-semibold text-gray-800 mb-2">
           { discussion.title }
         </h3>
-        <p>
+        <p className="text-sm text-gray-600 mb-1">
           Posted by {discussion.author}
         </p>
-        <p>
+        <p className="text-sm text-gray-500">
           {discussion.replies} replies - {discussion.date}
         </p>
       </div>
