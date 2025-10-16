@@ -4,6 +4,7 @@ import { z } from "zod";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { supabase } from "../lib/supabaseClient";
 import {
   Form,
   FormControl,
@@ -35,9 +36,35 @@ export default function SignUp() {
     },
   });
 
-  const onSubmit = (data) => {
-    console.log("Sign up data:", data);
+  const onSubmit = async (data) => {
+    try {
+      const { data: signUpData, error } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
+        options: {
+          data: {
+            name: data.name, // store user's name in metadata
+          },
+        },
+      });
+  
+      if (error) {
+        console.error("Sign up error:", error.message);
+        alert(`Error signing up: ${error.message}`);
+        return;
+      }
+  
+      console.log("Supabase signup successful:", signUpData);
+      alert("Sign-up successful! Check your email to confirm your account.");
+  
+      // Optional: navigate to sign-in page
+      // navigate("/signin");
+    } catch (err) {
+      console.error("Unexpected signup error:", err);
+      alert("Something went wrong, please try again.");
+    }
   };
+  
 
   return (
     <div className="min-h-screen bg-background flex flex-col">

@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -13,6 +13,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { supabase } from "../lib/supabaseClient";
 
 const signInSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -28,10 +29,27 @@ export default function SignIn() {
     },
   });
 
-  const onSubmit = (data) => {
-    console.log("Sign in data:", data);
-  };
 
+  const [, setLocation] = useLocation();
+  const onSubmit = async (data) => {
+    console.log("Sign in data:", data);
+
+    const { email, password } = data;
+
+    const { data: signInData, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+if (error) {
+  console.error("Error signing in:", error.message);
+  alert(`Sign-in failed: ${error.message}`);
+} else {
+  console.log("Signed in successfully:", signInData);
+  alert("Signed in successfully!");
+
+  setLocation("/");
+}
+  };
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Header with Logo and Theme Toggle */}
