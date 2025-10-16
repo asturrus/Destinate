@@ -1,26 +1,56 @@
+import { useState } from "react";
 import { DiscussionCard } from "@/components/DiscussionCard";
+import { DiscussionPage } from "@/components/DiscussionPage";
+import { NewDiscussionForm } from "@/components/NewDiscussionForm";
 
 export function PopularDiscussions() {
-  const discussions = [
+  const [selected, setSelected] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+  const [discussions, setDiscussions] = useState([
     { title: "Best food spots in Tokyo?", author: "Ethan", replies: 12, date: "Sep 20" },
     { title: "Hidden gems in Venice canals", author: "Ethan", replies: 5, date: "Sep 19" },
     { title: "Romantic places in Paris", author: "Ethan", replies: 9, date: "Sep 18" },
     { title: "Budget travel tips for London", author: "Ethan", replies: 7, date: "Sep 17" },
-  ];
+  ]);
+
+  const addDiscussion = (newDiscussion) => {
+    setDiscussions([newDiscussion, ...discussions]);
+    setShowForm(false);
+  };
+
+  // const discussions = [
+  //   { title: "Best food spots in Tokyo?", author: "Ethan", replies: 12, date: "Sep 20" },
+  //   { title: "Hidden gems in Venice canals", author: "Ethan", replies: 5, date: "Sep 19" },
+  //   { title: "Romantic places in Paris", author: "Ethan", replies: 9, date: "Sep 18" },
+  //   { title: "Budget travel tips for London", author: "Ethan", replies: 7, date: "Sep 17" },
+  // ];
+
+  if (selected) {
+    return <DiscussionPage discussion={selected} onBack={() => setSelected(null)}/>;
+  }
 
   return (
     <section className="py-12 px-6">
-      <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">
-        Popular Discussions
-      </h2>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">
+          Popular Discussions
+        </h2>
+        <button
+          onClick={() => setShowForm(!showForm)}
+          className="bg-indigo-600 text-white px-4 py-2 rounded-lg shadow hover:bg-indigo-500 transition"
+        >
+          {showForm ? "Cancel" : "+ New Post"}
+        </button>
+      </div>
+
+      {showForm && <NewDiscussionForm onAddDiscussion={addDiscussion} />}
+
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {discussions.map((disc, i) => (
           <DiscussionCard
             key={i}
-            title={disc.title}
-            author={disc.author}
-            replies={disc.replies}
-            date={disc.date}
+            discussion={disc}
+            onClick={() => setSelected(disc)}
           />
         ))}
       </div>

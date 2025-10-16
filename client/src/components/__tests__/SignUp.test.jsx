@@ -2,6 +2,10 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import SignUp from '../../pages/SignUp';
 
+beforeAll(() => {
+  global.alert = vi.fn();
+});
+
 // Mock wouter
 vi.mock('wouter', () => ({
   Link: ({ href, children }) => <a href={href}>{children}</a>,
@@ -116,30 +120,29 @@ describe('SignUp Page', () => {
 
   it('submits form with valid data and matching passwords', async () => {
     const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-    
+  
     render(<SignUp />);
-    
+  
     const nameInput = screen.getByTestId('input-name');
     const emailInput = screen.getByTestId('input-email');
     const passwordInput = screen.getByTestId('input-password');
     const confirmPasswordInput = screen.getByTestId('input-confirm-password');
     const submitButton = screen.getByTestId('button-submit');
-    
+  
     fireEvent.change(nameInput, { target: { value: 'John Doe' } });
     fireEvent.change(emailInput, { target: { value: 'john@example.com' } });
     fireEvent.change(passwordInput, { target: { value: 'password123' } });
     fireEvent.change(confirmPasswordInput, { target: { value: 'password123' } });
     fireEvent.click(submitButton);
-    
+  
     await waitFor(() => {
+      // Only check that the name & email are logged — no passwords!
       expect(consoleSpy).toHaveBeenCalledWith('Sign up data:', {
         name: 'John Doe',
         email: 'john@example.com',
-        password: 'password123',
-        confirmPassword: 'password123'
       });
     });
-    
+  
     consoleSpy.mockRestore();
-  });
+  });  
 });
