@@ -42,10 +42,10 @@ export default function SignIn() {
     });
 if (error) {
   console.error("Error signing in:", error.message);
-  alert(`Sign-in failed: ${error.message}`);
+  console.error(`Sign-in failed: ${error.message}`);
 } else {
   console.log("Signed in successfully:", signInData);
-  alert("Signed in successfully!");
+  console.log("Signed in successfully!");
 
   setLocation("/");
 }

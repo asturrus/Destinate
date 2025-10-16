@@ -38,6 +38,11 @@ export default function SignUp() {
 
   const onSubmit = async (data) => {
     try {
+      console.log("Sign up data:", {
+        name: data.name,
+        email: data.email,
+      });
+  
       const { data: signUpData, error } = await supabase.auth.signUp({
         email: data.email,
         password: data.password,
@@ -56,16 +61,13 @@ export default function SignUp() {
   
       console.log("Supabase signup successful:", signUpData);
       alert("Sign-up successful! Check your email to confirm your account.");
-  
-      // Optional: navigate to sign-in page
-      // navigate("/signin");
-    } catch (err) {
-      console.error("Unexpected signup error:", err);
-      alert("Something went wrong, please try again.");
+    } catch (error) {
+      console.error("Unexpected error during sign up:", error);
+      alert(`Unexpected error: ${error.message}`);
     }
   };
   
-
+  
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Header with Logo and Theme Toggle */}
