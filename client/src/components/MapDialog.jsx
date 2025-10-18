@@ -7,12 +7,7 @@ import {
 } from "@/components/ui/dialog";
 import { InteractiveMap } from "./InteractiveMap";
 
-interface MapDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-}
-
-export function MapDialog({ open, onOpenChange }: MapDialogProps) {
+export function MapDialog({ open, onOpenChange }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-6xl h-[80vh] flex flex-col p-0">
