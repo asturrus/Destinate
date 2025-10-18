@@ -14,7 +14,7 @@ function Router({ onOpenMap }) {
   return (
     <Switch>
       <Route path="/">{() => <Home onOpenMap={onOpenMap} />}</Route>
-      <Route path="/forum" component={Forum} />
+      <Route path="/forum">{() => <Forum onOpenMap={onOpenMap} />}</Route>
       <Route path="/signin" component={SignIn} />
       <Route path="/signup" component={SignUp} />
       <Route path="/forgot-password" component={ForgotPassword} />
