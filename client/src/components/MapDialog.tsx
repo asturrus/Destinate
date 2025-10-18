@@ -15,15 +15,19 @@ interface MapDialogProps {
 export function MapDialog({ open, onOpenChange }: MapDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-6xl h-[80vh]">
-        <DialogHeader>
-          <DialogTitle>Explore Destinations</DialogTitle>
-          <DialogDescription>
-            Click on any marker to discover amazing destinations around the world
-          </DialogDescription>
-        </DialogHeader>
-        <div className="w-full h-full flex-1 rounded-lg overflow-hidden border">
-          <InteractiveMap />
+      <DialogContent className="max-w-6xl h-[80vh] flex flex-col p-0">
+        <div className="px-6 pt-6 pb-2">
+          <DialogHeader>
+            <DialogTitle>Explore Destinations</DialogTitle>
+            <DialogDescription>
+              Click on any marker to discover amazing destinations around the world
+            </DialogDescription>
+          </DialogHeader>
+        </div>
+        <div className="flex-1 px-6 pb-6 min-h-0">
+          <div className="w-full h-full rounded-lg overflow-hidden border">
+            <InteractiveMap />
+          </div>
         </div>
       </DialogContent>
     </Dialog>
