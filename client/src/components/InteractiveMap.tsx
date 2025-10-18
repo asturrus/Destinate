@@ -4,8 +4,9 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { destinations, type Destination } from '@shared/destinations';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { X, MapPin, AlertCircle } from 'lucide-react';
+import { X, MapPin, AlertCircle, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 export function InteractiveMap() {
   const mapContainer = useRef<HTMLDivElement>(null);
@@ -13,6 +14,8 @@ export function InteractiveMap() {
   const markers = useRef<Map<string, maplibregl.Marker>>(new Map());
   const [selectedDestination, setSelectedDestination] = useState<Destination | null>(null);
   const [mapError, setMapError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showSearchResults, setShowSearchResults] = useState(false);
 
   useEffect(() => {
     if (!mapContainer.current || map.current) return;
@@ -117,6 +120,24 @@ export function InteractiveMap() {
     });
   }, [selectedDestination]);
 
+  // Filter destinations based on search query
+  const filteredDestinations = destinations.filter(dest =>
+    dest.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    dest.country.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const handleSelectDestination = (destination: Destination) => {
+    setSelectedDestination(destination);
+    setSearchQuery('');
+    setShowSearchResults(false);
+    // Fly to destination
+    map.current?.flyTo({
+      center: [destination.coordinates.lng, destination.coordinates.lat],
+      zoom: 8,
+      duration: 1500
+    });
+  };
+
   if (mapError) {
     return (
       <div className="w-full h-full flex items-center justify-center bg-muted/20 rounded-lg">
@@ -161,6 +182,57 @@ export function InteractiveMap() {
         data-testid="map-container"
       />
       
+      {/* Search Bar */}
+      <div className="absolute top-4 right-4 w-80 z-10">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="text"
+            placeholder="Search destinations..."
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setShowSearchResults(e.target.value.length > 0);
+            }}
+            onFocus={() => setShowSearchResults(searchQuery.length > 0)}
+            onBlur={() => setTimeout(() => setShowSearchResults(false), 200)}
+            className="pl-10 bg-background shadow-lg"
+            data-testid="input-search-destination"
+          />
+          
+          {/* Search Results Dropdown */}
+          {showSearchResults && filteredDestinations.length > 0 && (
+            <Card className="absolute top-full mt-2 w-full shadow-lg max-h-60 overflow-auto">
+              <CardContent className="p-2">
+                {filteredDestinations.map((dest) => (
+                  <button
+                    key={dest.id}
+                    onClick={() => handleSelectDestination(dest)}
+                    className="w-full text-left px-3 py-2 rounded-md hover-elevate active-elevate-2 flex items-center gap-2"
+                    data-testid={`search-result-${dest.id}`}
+                  >
+                    <MapPin className="h-4 w-4 text-primary flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm font-medium truncate">{dest.name}</div>
+                      <div className="text-xs text-muted-foreground truncate">{dest.country}</div>
+                    </div>
+                  </button>
+                ))}
+              </CardContent>
+            </Card>
+          )}
+          
+          {/* No Results */}
+          {showSearchResults && searchQuery && filteredDestinations.length === 0 && (
+            <Card className="absolute top-full mt-2 w-full shadow-lg">
+              <CardContent className="p-4 text-center text-sm text-muted-foreground">
+                No destinations found
+              </CardContent>
+            </Card>
+          )}
+        </div>
+      </div>
+
       {/* Destination info card */}
       {selectedDestination && (
         <Card className="absolute top-4 left-4 w-80 max-h-[80%] overflow-auto shadow-lg z-10">
