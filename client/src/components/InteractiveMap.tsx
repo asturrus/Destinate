@@ -183,7 +183,7 @@ export function InteractiveMap() {
       />
       
       {/* Search Bar */}
-      <div className="absolute top-4 right-4 w-80 z-10">
+      <div className="absolute top-4 left-1/2 transform -translate-x-1/2 w-80 z-10">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
