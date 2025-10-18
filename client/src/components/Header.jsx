@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./ThemeToggle";
 import { Link } from "wouter";
 
-export function Header() {
+export function Header({ onOpenMap }) {
   const navigation = [
     { name: 'Home', href: '/' },
     { name: 'Destinations', href: '#features' },
@@ -44,10 +44,7 @@ export function Header() {
               </Button>
             </Link>
             <Button 
-              onClick={() => {
-                const mapSection = document.getElementById('map');
-                mapSection?.scrollIntoView({ behavior: 'smooth' });
-              }}
+              onClick={onOpenMap}
               data-testid="button-get-started"
             >
               Plan your trip
