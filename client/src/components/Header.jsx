@@ -43,7 +43,13 @@ export function Header() {
                 Sign In
               </Button>
             </Link>
-            <Button data-testid="button-get-started">
+            <Button 
+              onClick={() => {
+                const mapSection = document.getElementById('map');
+                mapSection?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              data-testid="button-get-started"
+            >
               Plan your trip
             </Button>
           </div>

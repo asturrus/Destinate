@@ -31,6 +31,10 @@ export function Hero() {
           <Button 
             size="lg" 
             className="bg-white/90 text-black hover:bg-white backdrop-blur-sm border border-white/20"
+            onClick={() => {
+              const mapSection = document.getElementById('map');
+              mapSection?.scrollIntoView({ behavior: 'smooth' });
+            }}
             data-testid="button-hero-get-started"
           >
             Get Started
@@ -41,6 +45,10 @@ export function Hero() {
             variant="outline" 
             size="lg"
             className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm"
+            onClick={() => {
+              const mapSection = document.getElementById('map');
+              mapSection?.scrollIntoView({ behavior: 'smooth' });
+            }}
             data-testid="button-hero-watch-demo"
           >
             <Map className="mr-2 h-5 w-5" />
