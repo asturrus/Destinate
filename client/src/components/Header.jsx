@@ -47,7 +47,7 @@ export function Header({ onOpenMap }) {
               onClick={onOpenMap}
               data-testid="button-get-started"
             >
-              Plan your trip
+              Explore Destinations
             </Button>
           </div>
         </div>
