@@ -4,7 +4,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { destinations, type Destination } from '@shared/destinations';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { X, MapPin } from 'lucide-react';
+import { X, MapPin, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export function InteractiveMap() {
@@ -12,22 +12,34 @@ export function InteractiveMap() {
   const map = useRef<maplibregl.Map | null>(null);
   const markers = useRef<Map<string, maplibregl.Marker>>(new Map());
   const [selectedDestination, setSelectedDestination] = useState<Destination | null>(null);
+  const [mapError, setMapError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!mapContainer.current || map.current) return;
 
-    // Initialize MapLibre GL map
-    map.current = new maplibregl.Map({
-      container: mapContainer.current,
-      style: 'https://demotiles.maplibre.org/style.json',
-      center: [10, 30],
-      zoom: 2,
-      minZoom: 1,
-      maxZoom: 18
-    });
+    try {
+      // Initialize MapLibre GL map
+      map.current = new maplibregl.Map({
+        container: mapContainer.current,
+        style: 'https://demotiles.maplibre.org/style.json',
+        center: [10, 30],
+        zoom: 2,
+        minZoom: 1,
+        maxZoom: 18
+      });
 
-    // Add navigation controls
-    map.current.addControl(new maplibregl.NavigationControl(), 'top-right');
+      // Add navigation controls
+      map.current.addControl(new maplibregl.NavigationControl(), 'top-right');
+
+      // Handle map errors
+      map.current.on('error', (e) => {
+        console.error('MapLibre GL error:', e);
+        setMapError('Map failed to load. WebGL may not be supported in your browser.');
+      });
+    } catch (error) {
+      console.error('Failed to initialize map:', error);
+      setMapError('Map initialization failed. WebGL may not be supported in your browser.');
+    }
 
     // Cleanup
     return () => {
@@ -104,6 +116,42 @@ export function InteractiveMap() {
       markers.current.set(destination.id, marker);
     });
   }, [selectedDestination]);
+
+  if (mapError) {
+    return (
+      <div className="w-full h-full flex items-center justify-center bg-muted/20 rounded-lg">
+        <Card className="max-w-md">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <AlertCircle className="h-5 w-5 text-destructive" />
+              Map Unavailable
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-sm text-muted-foreground">
+              {mapError}
+            </p>
+            <div className="space-y-2">
+              <h4 className="text-sm font-semibold">Available Destinations:</h4>
+              <div className="grid grid-cols-2 gap-2">
+                {destinations.map(dest => (
+                  <Button
+                    key={dest.id}
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setSelectedDestination(dest)}
+                    data-testid={`button-destination-${dest.id}`}
+                  >
+                    {dest.name}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="relative w-full h-full">
