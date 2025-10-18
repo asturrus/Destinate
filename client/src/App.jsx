@@ -1,6 +1,7 @@
 import { useEffect, useState }from "react";
 import { Switch, Route, Link, useLocation } from "wouter";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import{ supabase } from "@/lib/supabaseClient";
 import Home from "@/pages/Home";
 import Forum from "@/pages/Forum";
@@ -69,21 +70,24 @@ export default function App() {
               </span>
             </Link>
 
-            {user ? (
-              <button
-                onClick={handleSignOut}
-                className="w-10 h-10 flex items-center justify-center rounded-full bg-primary text-primary-foreground font-bold hover:opacity-80 transition"
-                title="Sign Out"
-              >
-                {initials}
-              </button>
-            ) : (
-              <Link href="/signin">
-                <span className="text-sm font-medium text-primary hover:underline cursor-pointer">
-                  Sign In
-                </span>
-              </Link>
-            )}
+            <div className="flex items-center gap-4">
+              <ThemeToggle />
+              {user ? (
+                <button
+                  onClick={handleSignOut}
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-primary text-primary-foreground font-bold hover:opacity-80 transition"
+                  title="Sign Out"
+                >
+                  {initials}
+                </button>
+              ) : (
+                <Link href="/signin">
+                  <span className="text-sm font-medium text-primary hover:underline cursor-pointer">
+                    Sign In
+                  </span>
+                </Link>
+              )}
+            </div>
           </div>
         </header>
 

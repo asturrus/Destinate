@@ -13,7 +13,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import { CheckCircle2 } from "lucide-react";
 
 const forgotPasswordSchema = z.object({
@@ -36,21 +35,7 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      {/* Header with Logo and Theme Toggle */}
-      <header className="w-full border-b">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex justify-between items-center">
-          <Link href="/">
-            <span className="text-2xl font-bold text-primary cursor-pointer" data-testid="text-logo">
-              Destinate
-            </span>
-          </Link>
-          <ThemeToggle />
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <div className="flex-1 flex items-center justify-center p-4">
+    <div className="flex items-center justify-center p-4 min-h-[calc(100vh-4rem)]">
         <div className="w-full max-w-md space-y-6">
           {!isSubmitted ? (
             <>
@@ -116,6 +101,5 @@ export default function ForgotPassword() {
           )}
         </div>
       </div>
-    </div>
   );
 }
