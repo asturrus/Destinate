@@ -1,9 +1,11 @@
-name: CI Pipeline
+name: CI + CD Pipeline
+
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+
 jobs:
   test:
     name: Test & Build
@@ -36,3 +38,19 @@ jobs:
       
     - name: Build application
       run: npm run build
+
+  deploy:
+    name: Deploy to Vercel
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm run build
+      - run: npx vercel --prod --token=${{ dXI7wu4ZN4t3KCp2ulQliR76 }}
+        env:
+          VERCEL_ORG_ID: ${{ ethans-projects-890e4c66 }}
+          VERCEL_PROJECT_ID: ${{ prj_6BW2ZP1ahhBCTRqfy1VeKIT8tBhY }}
