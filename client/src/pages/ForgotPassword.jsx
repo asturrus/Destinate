@@ -37,6 +37,14 @@ export default function ForgotPassword() {
   return (
     <div className="flex items-center justify-center p-4 min-h-[calc(100vh-4rem)]">
         <div className="w-full max-w-md space-y-6">
+          <div className="text-center">
+            <Link href="/">
+              <span className="text-2xl font-bold text-primary cursor-pointer" data-testid="text-logo">
+                Destinate
+              </span>
+            </Link>
+          </div>
+          
           {!isSubmitted ? (
             <>
               <div className="space-y-2 text-center">
