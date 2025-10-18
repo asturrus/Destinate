@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { destinations, type Destination } from '@shared/destinations';
+import { destinations } from '@shared/destinations';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { X, MapPin, AlertCircle, Search } from 'lucide-react';
@@ -9,11 +9,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 export function InteractiveMap() {
-  const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<maplibregl.Map | null>(null);
-  const markers = useRef<Map<string, maplibregl.Marker>>(new Map());
-  const [selectedDestination, setSelectedDestination] = useState<Destination | null>(null);
-  const [mapError, setMapError] = useState<string | null>(null);
+  const mapContainer = useRef(null);
+  const map = useRef(null);
+  const markers = useRef(new Map());
+  const [selectedDestination, setSelectedDestination] = useState(null);
+  const [mapError, setMapError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearchResults, setShowSearchResults] = useState(false);
 
@@ -102,7 +102,7 @@ export function InteractiveMap() {
       // Create and add marker
       const marker = new maplibregl.Marker({ element: el })
         .setLngLat([destination.coordinates.lng, destination.coordinates.lat])
-        .addTo(map.current!);
+        .addTo(map.current);
 
       // Add click handler
       el.addEventListener('click', () => {
@@ -126,7 +126,7 @@ export function InteractiveMap() {
     dest.country.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleSelectDestination = (destination: Destination) => {
+  const handleSelectDestination = (destination) => {
     setSelectedDestination(destination);
     setSearchQuery('');
     setShowSearchResults(false);
