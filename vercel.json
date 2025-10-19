@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "vite.config.ts", "use": "@vercel/static-build" }
+  ],
+  "buildCommand": "npm run vercel-build",
+  "outputDirectory": "dist",
+  "ignoreCommand": "echo 'Skipping server folder'",
+  "routes": [
+    { "src": "/(.*)", "dest": "/$1" }
+  ]
+}
