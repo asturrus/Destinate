@@ -1,18 +1,20 @@
 import { useEffect, useState }from "react";
 import { Switch, Route, Link, useLocation } from "wouter";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import{ supabase } from "@/lib/supabaseClient";
+import { MapDialog } from "@/components/MapDialog";
 import Home from "@/pages/Home";
 import Forum from "@/pages/Forum";
 import SignIn from "@/pages/SignIn";
 import SignUp from "@/pages/SignUp";
 import ForgotPassword from "@/pages/ForgotPassword";
 
-function Router() {
+function Router({ onOpenMap }) {
   return (
     <Switch>
-      <Route path="/" component={Home} />
-      <Route path="/forum" component={Forum} />
+      <Route path="/">{() => <Home onOpenMap={onOpenMap} />}</Route>
+      <Route path="/forum">{() => <Forum onOpenMap={onOpenMap} />}</Route>
       <Route path="/signin" component={SignIn} />
       <Route path="/signup" component={SignUp} />
       <Route path="/forgot-password" component={ForgotPassword} />
@@ -23,6 +25,7 @@ function Router() {
 
 export default function App() {
   const [user, setUser] = useState(null);
+  const [isMapOpen, setIsMapOpen] = useState(false);
   const [, setLocation] = useLocation();
 
   useEffect(() => {
@@ -69,28 +72,34 @@ export default function App() {
               </span>
             </Link>
 
-            {user ? (
-              <button
-                onClick={handleSignOut}
-                className="w-10 h-10 flex items-center justify-center rounded-full bg-primary text-primary-foreground font-bold hover:opacity-80 transition"
-                title="Sign Out"
-              >
-                {initials}
-              </button>
-            ) : (
-              <Link href="/signin">
-                <span className="text-sm font-medium text-primary hover:underline cursor-pointer">
-                  Sign In
-                </span>
-              </Link>
-            )}
+            <div className="flex items-center gap-4">
+              <ThemeToggle />
+              {user ? (
+                <button
+                  onClick={handleSignOut}
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-primary text-primary-foreground font-bold hover:opacity-80 transition"
+                  title="Sign Out"
+                >
+                  {initials}
+                </button>
+              ) : (
+                <Link href="/signin">
+                  <span className="text-sm font-medium text-primary hover:underline cursor-pointer">
+                    Sign In
+                  </span>
+                </Link>
+              )}
+            </div>
           </div>
         </header>
 
         {/* Page content */}
         <main className="flex-1">
-          <Router />
+          <Router onOpenMap={() => setIsMapOpen(true)} />
         </main>
+
+        {/* Global Map Dialog - accessible from all pages */}
+        <MapDialog open={isMapOpen} onOpenChange={setIsMapOpen} />
       </div>
     </ThemeProvider>
   );

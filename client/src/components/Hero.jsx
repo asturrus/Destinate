@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Map } from "lucide-react";
 import heroBackground from "@assets/generated_images/Modern_hero_background_gradient_fbe282f2.png";
 
-export function Hero() {
+export function Hero({ onOpenMap }) {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image */}
@@ -31,6 +31,7 @@ export function Hero() {
           <Button 
             size="lg" 
             className="bg-white/90 text-black hover:bg-white backdrop-blur-sm border border-white/20"
+            onClick={onOpenMap}
             data-testid="button-hero-get-started"
           >
             Get Started
@@ -41,6 +42,7 @@ export function Hero() {
             variant="outline" 
             size="lg"
             className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm"
+            onClick={onOpenMap}
             data-testid="button-hero-watch-demo"
           >
             <Map className="mr-2 h-5 w-5" />
