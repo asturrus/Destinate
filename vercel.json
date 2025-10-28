@@ -1,12 +1,13 @@
 {
   "version": 2,
-  "builds": [
-    { "src": "client/vite.config.ts", "use": "@vercel/static-build" }
-  ],
-  "buildCommand": "cd client && npm install && npm run build",
-  "outputDirectory": "../dist/public",
+  "buildCommand": "npm install && npm run vercel-build",
+  "outputDirectory": "dist/public",
   "ignoreCommand": "echo 'Skipping server folder'",
+  "builds": [
+    { "src": "vite.config.ts", "use": "@vercel/static-build" }
+  ],
   "routes": [
+    { "src": "/api/(.*)", "dest": "server/index.ts" },
     { "src": "/(.*)", "dest": "/$1" }
   ]
 }
