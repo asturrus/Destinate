@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom'
+import { beforeAll, afterEach, afterAll } from 'vitest'
 import { server } from './client/src/mocks/server'
 
 // Start MSW server before all tests
