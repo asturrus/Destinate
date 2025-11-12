@@ -7,48 +7,18 @@ on:
     branches: [ main ]
 
 jobs:
-
   build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-    
-      - name: Display build number
-        run: echo "Build number is ${{ github.run_number }}"
-    
-      - name: Use in version
-        run: echo "Version 1.0.${{ github.run_number }}"
-    
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-    
-      - name: Install dependencies
-        run: npm install
-    
-      - name: Run tests
-        run: npm test
-        continue-on-error: true
-    
-      - name: Write bugs to file
-        if: failure()
-        run: |
-          echo "BUILD #${{ github.run_number }} - Bug Report" > bugs-build-${{ github.run_number }}.txt
-          echo "Version: 1.0.${{ github.run_number }}" >> bugs-build-${{ github.run_number }}.txt
-          echo "Generated: $(date)" >> bugs-build-${{ github.run_number }}.txt
-          echo "Commit: ${{ github.sha }}" >> bugs-build-${{ github.run_number }}.txt
-          echo "" >> bugs-build-${{ github.run_number }}.txt
-          echo "FAILED TESTS - See logs above" >> bugs-build-${{ github.run_number }}.txt
-    
-      - name: Upload bug report
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: bugs-build-${{ github.run_number }}
-          path: bugs-build-${{ github.run_number }}.txt
-      
+  runs-on: ubuntu-latest
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Display build number
+      run: echo "Build number is ${{ github.run_number }}"
+
+    - name: Use in version
+      run: echo "Version 1.0.${{ github.run_number }}"
+ 
   test:
     name: Test & Build
     runs-on: ubuntu-latest
