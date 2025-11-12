@@ -34,8 +34,34 @@ jobs:
       
     - name: Run tests
       run: npm test
+      continue-on-error: true
+      id: test-step
       env:
         NODE_OPTIONS: --experimental-vm-modules
+    
+    - name: Write bugs to file
+      if: steps.test-step.outcome == 'failure'
+      run: |
+        echo "BUILD #${{ github.run_number }} - Bug Report" > bugs-build-${{ github.run_number }}.txt
+        echo "Version: 1.0.${{ github.run_number }}" >> bugs-build-${{ github.run_number }}.txt
+        echo "Generated: $(date)" >> bugs-build-${{ github.run_number }}.txt
+        echo "Commit: ${{ github.sha }}" >> bugs-build-${{ github.run_number }}.txt
+        echo "Branch: ${{ github.ref_name }}" >> bugs-build-${{ github.run_number }}.txt
+        echo "Node Version: ${{ matrix.node-version }}" >> bugs-build-${{ github.run_number }}.txt
+        echo "" >> bugs-build-${{ github.run_number }}.txt
+        echo "FAILED TESTS DETECTED" >> bugs-build-${{ github.run_number }}.txt
+        echo "Check the workflow logs for detailed error messages" >> bugs-build-${{ github.run_number }}.txt
+    
+    - name: Upload bug report
+      if: steps.test-step.outcome == 'failure'
+      uses: actions/upload-artifact@v3
+      with:
+        name: bugs-build-${{ github.run_number }}-node-${{ matrix.node-version }}
+        path: bugs-build-${{ github.run_number }}.txt
+    
+    - name: Fail job if tests failed
+      if: steps.test-step.outcome == 'failure'
+      run: exit 1
       
     - name: Build application
       run: npm run build
@@ -49,8 +75,22 @@ jobs:
     - name: Display build number
       run: echo "Build number is ${{ github.run_number }}"
   
-    - name: Use in version
+    - name: Create version number
       run: echo "Version 1.0.${{ github.run_number }}"
+    
+    - name: Save build number to file
+      run: |
+        echo "BUILD #${{ github.run_number }}" > build-number.txt
+        echo "Version: 1.0.${{ github.run_number }}" >> build-number.txt
+        echo "Generated: $(date)" >> build-number.txt
+        echo "Commit: ${{ github.sha }}" >> build-number.txt
+        echo "Branch: ${{ github.ref_name }}" >> build-number.txt
+    
+    - name: Upload build number artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-${{ github.run_number }}
+        path: build-number.txt
   
   deploy:
     name: Deploy to Vercel
