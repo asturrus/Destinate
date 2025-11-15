@@ -15,7 +15,10 @@ export default defineConfig({
         'node_modules/',
         'dist/',
         '**/*.d.ts',
-        'test-setup.ts'
+        'test-setup.ts',
+        '**/e2e/**',
+        'tests/e2e/**',
+        '**/tests/e2e/**',
       ]
     }
   },
