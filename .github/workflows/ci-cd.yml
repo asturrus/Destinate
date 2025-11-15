@@ -1,6 +1,7 @@
 name: CI + CD Pipeline
 
 on:
+  workflow_dispatch:
   push:
     branches: [ main ]
   pull_request:
@@ -38,6 +39,18 @@ jobs:
       
     - name: Build application
       run: npm run build
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+  
+    - name: Display build number
+      run: echo "Build number is ${{ github.run_number }}"
+  
+    - name: Use in version
+      run: echo "Version 1.0.${{ github.run_number }}"
 
     - name: Install Playwright Browsers
       if: matrix.node-version == '20.x'
