@@ -39,8 +39,7 @@ jobs:
       
     - name: Build application
       run: npm run build
-<<<<<<< HEAD
-  
+
   build:
     runs-on: ubuntu-latest
     steps:
@@ -52,8 +51,6 @@ jobs:
   
     - name: Use in version
       run: echo "Version 1.0.${{ github.run_number }}"
-  
-=======
 
     - name: Install Playwright Browsers
       if: matrix.node-version == '20.x'
@@ -71,7 +68,6 @@ jobs:
       if: matrix.node-version == '20.x'
       run: npm run test:e2e
 
->>>>>>> 3c943b73126b31514736a070c06db25b96d55d8b
   deploy:
     name: Deploy to Vercel
     needs: test
