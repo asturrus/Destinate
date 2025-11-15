@@ -15,8 +15,11 @@
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
     "test:header": "vitest run client/src/components/__tests__/Header.test.jsx",
-    "test:features": "vitest run client/src/components/__tests__/Feature.test.jsx"
-},
+    "test:features": "vitest run client/src/components/__tests__/Feature.test.jsx",
+    "test:e2e": "node tests/e2e/run-all.js",
+    "test:e2e:forum": "node tests/e2e/forum-hero.spec.js",
+    "test:all": "npm test && npm run test:e2e"
+  },
   "dependencies": {
     "@faker-js/faker": "^10.1.0",
     "@hookform/resolvers": "^3.10.0",
@@ -94,6 +97,7 @@
     "zod-validation-error": "^3.4.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.56.1",
     "@replit/vite-plugin-cartographer": "^0.3.0",
     "@replit/vite-plugin-runtime-error-modal": "^0.0.3",
     "@tailwindcss/typography": "^0.5.15",
