@@ -25,7 +25,7 @@ async function runTest(testFile) {
 
 async function runAllTests() {
   const tests = [
-    'tests/e2e/forum-hero.test.js'
+    'tests/e2e/forum-hero.spec.js'
   ];
   
   console.log('=== Running All E2E Tests ===');

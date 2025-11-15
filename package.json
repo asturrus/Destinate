@@ -17,8 +17,7 @@
     "test:header": "vitest run client/src/components/__tests__/Header.test.jsx",
     "test:features": "vitest run client/src/components/__tests__/Feature.test.jsx",
     "test:e2e": "node tests/e2e/run-all.js",
-    "test:e2e:forum": "node tests/e2e/forum-hero.test.js",
-    "test:e2e:about": "node tests/e2e/about-us.test.js",
+    "test:e2e:forum": "node tests/e2e/forum-hero.spec.js",
     "test:all": "npm test && npm run test:e2e"
   },
   "dependencies": {
