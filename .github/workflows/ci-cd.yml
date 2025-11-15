@@ -39,6 +39,7 @@ jobs:
       
     - name: Build application
       run: npm run build
+<<<<<<< HEAD
   
   build:
     runs-on: ubuntu-latest
@@ -52,6 +53,25 @@ jobs:
     - name: Use in version
       run: echo "Version 1.0.${{ github.run_number }}"
   
+=======
+
+    - name: Install Playwright Browsers
+      if: matrix.node-version == '20.x'
+      run: npx playwright install --with-deps chromium
+
+    - name: Start application for E2E tests
+      if: matrix.node-version == '20.x'
+      run: |
+        npm start &
+        npx wait-on http://localhost:5000 --timeout 60000
+      env:
+        NODE_ENV: production
+
+    - name: Run E2E tests
+      if: matrix.node-version == '20.x'
+      run: npm run test:e2e
+
+>>>>>>> 3c943b73126b31514736a070c06db25b96d55d8b
   deploy:
     name: Deploy to Vercel
     needs: test
