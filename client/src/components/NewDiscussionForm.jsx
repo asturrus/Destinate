@@ -21,7 +21,7 @@ export function NewDiscussionForm({ onAddDiscussion }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-md mx-auto mb-8 p-4 bg-white shadow rounded-xl">
+    <form onSubmit={handleSubmit} className="max-w-md mx-auto mb-8 p-4 bg-white shadow rounded-xl" data-testid="form-new-discussion">
       <h3 className="text-lg font-bold mb-4">Start a New Discussion</h3>
       <input
         type="text"
@@ -29,6 +29,7 @@ export function NewDiscussionForm({ onAddDiscussion }) {
         onChange={(e) => setTitle(e.target.value)}
         placeholder="Discussion title"
         className="w-full px-4 py-2 mb-2 border rounded"
+        data-testid="input-discussion-title"
       />
       <input
         type="text"
@@ -36,10 +37,12 @@ export function NewDiscussionForm({ onAddDiscussion }) {
         onChange={(e) => setAuthor(e.target.value)}
         placeholder="Your name"
         className="w-full px-4 py-2 mb-2 border rounded"
+        data-testid="input-discussion-author"
       />
       <button
         type="submit"
         className="w-full px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-500"
+        data-testid="button-post-discussion"
       >
         Post Discussion
       </button>

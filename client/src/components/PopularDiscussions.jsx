@@ -30,14 +30,15 @@ export function PopularDiscussions() {
   }
 
   return (
-    <section className="py-12 px-6">
+    <section className="py-12 px-6" data-testid="section-popular-discussions">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">
+        <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center" data-testid="text-discussions-heading">
           Popular Discussions
         </h2>
         <button
           onClick={() => setShowForm(!showForm)}
           className="bg-indigo-600 text-white px-4 py-2 rounded-lg shadow hover:bg-indigo-500 transition"
+          data-testid="button-new-post"
         >
           {showForm ? "Cancel" : "+ New Post"}
         </button>
@@ -45,7 +46,7 @@ export function PopularDiscussions() {
 
       {showForm && <NewDiscussionForm onAddDiscussion={addDiscussion} />}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6" data-testid="grid-discussions">
         {discussions.map((disc, i) => (
           <DiscussionCard
             key={i}

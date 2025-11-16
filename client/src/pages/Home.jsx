@@ -8,7 +8,7 @@ import { AboutUs } from "@/components/AboutUs";
 export default function Home({ onOpenMap }) {
   return (
     <div className="min-h-screen bg-background">
-      <Header onOpenMap={onOpenMap} />
+      <Header />
       <main>
         <Hero onOpenMap={onOpenMap} />
         <Features />

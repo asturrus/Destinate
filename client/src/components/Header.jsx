@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./ThemeToggle";
 import { Link } from "wouter";
 
-export function Header({ onOpenMap }) {
+export function Header() {
   const navigation = [
     { name: 'Home', href: '/' },
     { name: 'Destinations', href: '#features' },
@@ -16,9 +16,11 @@ export function Header({ onOpenMap }) {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <span className="text-2xl font-bold text-primary" data-testid="text-logo">
-              Destinate
-            </span>
+            <Link href="/">
+              <span className="text-2xl font-bold text-primary cursor-pointer" data-testid="text-logo">
+                Destinate
+              </span>
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
@@ -43,12 +45,11 @@ export function Header({ onOpenMap }) {
                 Sign In
               </Button>
             </Link>
-            <Button 
-              onClick={onOpenMap}
-              data-testid="button-get-started"
-            >
-              Plan your trip
-            </Button>
+            <Link href="/itineraries">
+              <Button data-testid="button-get-started">
+                Plan your trip
+              </Button>
+            </Link>
           </div>
         </div>
       </nav>

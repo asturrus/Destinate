@@ -2,6 +2,7 @@ import { useEffect, useState }from "react";
 import { Switch, Route, Link, useLocation } from "wouter";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { Toaster } from "@/components/ui/toaster";
 import{ supabase } from "@/lib/supabaseClient";
 import { MapDialog } from "@/components/MapDialog";
 import Home from "@/pages/Home";
@@ -9,15 +10,21 @@ import Forum from "@/pages/Forum";
 import SignIn from "@/pages/SignIn";
 import SignUp from "@/pages/SignUp";
 import ForgotPassword from "@/pages/ForgotPassword";
+import ItinerariesPage from "@/pages/ItinerariesPage";
+import CreateItineraryPage from "@/pages/CreateItineraryPage";
+import ItineraryDetailPage from "@/pages/ItineraryDetailPage";
 
 function Router({ onOpenMap }) {
   return (
     <Switch>
       <Route path="/">{() => <Home onOpenMap={onOpenMap} />}</Route>
-      <Route path="/forum">{() => <Forum onOpenMap={onOpenMap} />}</Route>
+      <Route path="/forum" component={Forum} />
       <Route path="/signin" component={SignIn} />
       <Route path="/signup" component={SignUp} />
       <Route path="/forgot-password" component={ForgotPassword} />
+      <Route path="/itineraries" component={ItinerariesPage} />
+      <Route path="/itineraries/create" component={CreateItineraryPage} />
+      <Route path="/itineraries/:id" component={ItineraryDetailPage} />
       {/* Future routes can be added here */}
     </Switch>
   );
@@ -101,6 +108,7 @@ export default function App() {
         {/* Global Map Dialog - accessible from all pages */}
         <MapDialog open={isMapOpen} onOpenChange={setIsMapOpen} />
       </div>
+      <Toaster />
     </ThemeProvider>
   );
 }

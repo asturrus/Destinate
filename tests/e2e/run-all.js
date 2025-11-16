@@ -28,7 +28,9 @@ async function runAllTests() {
     'tests/e2e/forum-hero.spec.js',
     'tests/e2e/about-us.spec.js',
     'tests/e2e/forum-functionality.spec.js',
-    'tests/e2e/navigation.spec.js'
+    'tests/e2e/navigation.spec.js',
+    'tests/e2e/destination-search.spec.js',
+    'tests/e2e/itinerary-crud.spec.js'
   ];
   
   console.log('=== Running All E2E Tests ===');
