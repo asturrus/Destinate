@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./ThemeToggle";
 import { Link } from "wouter";
 
-export function Header({ onOpenMap }) {
+export function Header() {
   const navigation = [
     { name: 'Home', href: '/' },
     { name: 'Destinations', href: '#features' },
@@ -43,12 +43,11 @@ export function Header({ onOpenMap }) {
                 Sign In
               </Button>
             </Link>
-            <Button 
-              onClick={onOpenMap}
-              data-testid="button-get-started"
-            >
-              Plan your trip
-            </Button>
+            <Link href="/itineraries">
+              <Button data-testid="button-get-started">
+                Plan your trip
+              </Button>
+            </Link>
           </div>
         </div>
       </nav>
