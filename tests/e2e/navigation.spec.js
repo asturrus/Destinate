@@ -39,9 +39,11 @@ async function testNavigation() {
     // Test 3: Click logo to return home
     console.log('\nTest 3: Click logo to return to home');
     await page.click('[data-testid="text-logo"]');
+    await page.waitForURL(BASE_URL + '/');
     await page.waitForSelector('[data-testid="text-hero-title"]');
+    const logoUrl = page.url();
     const heroTitle = await page.isVisible('[data-testid="text-hero-title"]');
-    if (heroTitle) {
+    if (heroTitle && logoUrl === BASE_URL + '/') {
       console.log('✓ Returned to home page via logo');
     } else {
       throw new Error('Did not return to home page');
@@ -77,8 +79,8 @@ async function testNavigation() {
 
     // Test 7: Check itineraries page loads correctly
     console.log('\nTest 7: Verify itineraries page content');
-    await page.waitForSelector('[data-testid="page-itineraries"]');
-    const pageVisible = await page.isVisible('[data-testid="page-itineraries"]');
+    await page.waitForSelector('[data-testid="itineraries-page"]');
+    const pageVisible = await page.isVisible('[data-testid="itineraries-page"]');
     if (pageVisible) {
       console.log('✓ Itineraries page content loaded');
     } else {
@@ -101,13 +103,14 @@ async function testNavigation() {
       console.log('⊘ Skipped - No existing itineraries to create from');
     }
 
-    // Test 9: Test About section anchor navigation
+    // Test 9: Test About section anchor navigation (navigate home first)
     console.log('\nTest 9: Test anchor link navigation (About section)');
     await page.goto(BASE_URL);
-    await page.waitForSelector('[data-testid="link-nav-about"]');
+    await page.waitForSelector('[data-testid="text-hero-title"]', { timeout: 10000 });
+    await page.waitForSelector('[data-testid="link-nav-about"]', { timeout: 5000 });
     await page.click('[data-testid="link-nav-about"]');
-    await page.waitForTimeout(500); // Wait for scroll
-    const aboutSection = await page.isVisible('[data-testid="section-about"]');
+    await page.waitForTimeout(1000); // Wait for scroll
+    const aboutSection = await page.isVisible('[data-testid="about-us"]');
     if (aboutSection) {
       console.log('✓ Scrolled to About section via anchor link');
     } else {

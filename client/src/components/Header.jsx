@@ -16,9 +16,11 @@ export function Header() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <span className="text-2xl font-bold text-primary" data-testid="text-logo">
-              Destinate
-            </span>
+            <Link href="/">
+              <span className="text-2xl font-bold text-primary cursor-pointer" data-testid="text-logo">
+                Destinate
+              </span>
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
