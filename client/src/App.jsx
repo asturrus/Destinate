@@ -9,6 +9,9 @@ import Forum from "@/pages/Forum";
 import SignIn from "@/pages/SignIn";
 import SignUp from "@/pages/SignUp";
 import ForgotPassword from "@/pages/ForgotPassword";
+import ItinerariesPage from "@/pages/ItinerariesPage";
+import CreateItineraryPage from "@/pages/CreateItineraryPage";
+import ItineraryDetailPage from "@/pages/ItineraryDetailPage";
 
 function Router({ onOpenMap }) {
   return (
@@ -18,6 +21,9 @@ function Router({ onOpenMap }) {
       <Route path="/signin" component={SignIn} />
       <Route path="/signup" component={SignUp} />
       <Route path="/forgot-password" component={ForgotPassword} />
+      <Route path="/itineraries" component={ItinerariesPage} />
+      <Route path="/itineraries/create" component={CreateItineraryPage} />
+      <Route path="/itineraries/:id" component={ItineraryDetailPage} />
       {/* Future routes can be added here */}
     </Switch>
   );
