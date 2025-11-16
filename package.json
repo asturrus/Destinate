@@ -18,6 +18,8 @@
     "test:features": "vitest run client/src/components/__tests__/Feature.test.jsx",
     "test:e2e": "node tests/e2e/run-all.js",
     "test:e2e:forum": "node tests/e2e/forum-hero.spec.js",
+    "test:e2e:nav": "node tests/e2e/navigation.spec.js",
+    "test:e2e:forum-func": "node tests/e2e/forum-functionality.spec.js",
     "test:all": "npm test && npm run test:e2e"
   },
   "dependencies": {
