@@ -2,6 +2,7 @@ import { useEffect, useState }from "react";
 import { Switch, Route, Link, useLocation } from "wouter";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { Toaster } from "@/components/ui/toaster";
 import{ supabase } from "@/lib/supabaseClient";
 import { MapDialog } from "@/components/MapDialog";
 import Home from "@/pages/Home";
@@ -107,6 +108,7 @@ export default function App() {
         {/* Global Map Dialog - accessible from all pages */}
         <MapDialog open={isMapOpen} onOpenChange={setIsMapOpen} />
       </div>
+      <Toaster />
     </ThemeProvider>
   );
 }

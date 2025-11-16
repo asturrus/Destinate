@@ -3,140 +3,178 @@ import { chromium } from 'playwright';
 async function testItineraryCRUD() {
   let browser;
   let page;
-  let createdItineraryId;
   
   try {
     console.log('Starting browser...');
     browser = await chromium.launch({ headless: true });
     page = await browser.newPage();
     
-    // Test 1: Create itinerary
-    console.log('Test 1: Create a new itinerary via POST /api/itineraries');
-    const createResponse = await page.request.post('http://localhost:5000/api/itineraries', {
-      data: {
-        title: 'European Adventure',
-        description: 'A 2-week tour of Europe',
-        destinations: [
-          { id: 'paris', name: 'Paris', country: 'France' },
-          { id: 'venice', name: 'Venice', country: 'Italy' }
-        ]
-      }
-    });
+    console.log('Test 1: Navigate to itineraries page');
+    await page.goto('http://localhost:5000/itineraries');
+    await page.waitForSelector('[data-testid="itineraries-page"]', { timeout: 5000 });
+    console.log('✓ Successfully loaded itineraries page');
     
-    if (createResponse.status() !== 201) {
-      throw new Error(`Expected 201, got ${createResponse.status()}`);
+    console.log('\nTest 2: Create a new itinerary through the UI');
+    await page.click('[data-testid="button-create-itinerary"]');
+    await page.waitForSelector('[data-testid="create-itinerary-page"]', { timeout: 5000 });
+    console.log('✓ Navigated to create itinerary page');
+    
+    await page.fill('[data-testid="input-title"]', 'European Adventure');
+    await page.fill('[data-testid="input-description"]', 'A 2-week tour of Europe');
+    console.log('✓ Filled in title and description');
+    
+    await page.click('[data-testid="select-destination"]');
+    await page.waitForSelector('[data-testid="destination-option-paris"]', { timeout: 2000 });
+    await page.click('[data-testid="destination-option-paris"]');
+    await page.click('[data-testid="button-add-destination"]');
+    console.log('✓ Added Paris to destinations');
+    
+    await page.click('[data-testid="select-destination"]');
+    await page.waitForSelector('[data-testid="destination-option-rome"]', { timeout: 2000 });
+    await page.click('[data-testid="destination-option-rome"]');
+    await page.click('[data-testid="button-add-destination"]');
+    console.log('✓ Added Rome to destinations');
+    
+    const selectedDestinations = await page.locator('[data-testid="selected-destinations"]');
+    const destinationCount = await selectedDestinations.locator('[data-testid^="selected-destination-"]').count();
+    if (destinationCount !== 2) {
+      throw new Error(`Expected 2 destinations, but found ${destinationCount}`);
     }
+    console.log('✓ Verified 2 destinations are selected');
     
-    const createdItinerary = await createResponse.json();
-    createdItineraryId = createdItinerary.id;
+    await page.click('[data-testid="button-submit"]');
+    console.log('✓ Submitted the form');
     
-    if (createdItinerary.title === 'European Adventure' && createdItinerary.destinations.length === 2) {
-      console.log('✓ Itinerary created successfully with correct data');
-    } else {
-      throw new Error(`Unexpected itinerary data: ${JSON.stringify(createdItinerary)}`);
+    console.log('\nTest 3: Verify itinerary was created and appears in list');
+    await page.waitForSelector('[data-testid="itineraries-page"]', { timeout: 5000 });
+    await page.waitForSelector('[data-testid="itineraries-grid"]', { timeout: 5000 });
+    console.log('✓ Redirected back to itineraries list page');
+    
+    const itineraryCards = await page.locator('[data-testid^="itinerary-card-"]').all();
+    if (itineraryCards.length === 0) {
+      throw new Error('Expected at least 1 itinerary card, but found none');
     }
+    console.log(`✓ Found ${itineraryCards.length} itinerary card(s) in the list`);
     
-    // Test 2: Retrieve the created itinerary
-    console.log('Test 2: Retrieve itinerary via GET /api/itineraries/:id');
-    const getResponse = await page.request.get(`http://localhost:5000/api/itineraries/${createdItineraryId}`);
-    
-    if (getResponse.status() !== 200) {
-      throw new Error(`Expected 200, got ${getResponse.status()}`);
+    const firstCard = itineraryCards[0];
+    const titleText = await firstCard.locator('[data-testid^="itinerary-title-"]').textContent();
+    if (!titleText.includes('European Adventure')) {
+      throw new Error(`Expected title to contain 'European Adventure', but got '${titleText}'`);
     }
+    console.log('✓ Verified itinerary title is displayed correctly');
     
-    const retrievedItinerary = await getResponse.json();
-    
-    if (retrievedItinerary.id === createdItineraryId && retrievedItinerary.title === 'European Adventure') {
-      console.log('✓ Itinerary retrieved successfully - data persisted');
-    } else {
-      throw new Error(`Retrieved data doesn't match: ${JSON.stringify(retrievedItinerary)}`);
+    const descriptionText = await firstCard.locator('[data-testid^="itinerary-description-"]').textContent();
+    if (!descriptionText.includes('A 2-week tour of Europe')) {
+      throw new Error(`Expected description to contain 'A 2-week tour of Europe', but got '${descriptionText}'`);
     }
+    console.log('✓ Verified itinerary description is displayed correctly');
     
-    // Test 3: Get all itineraries
-    console.log('Test 3: Get all itineraries via GET /api/itineraries');
-    const allResponse = await page.request.get('http://localhost:5000/api/itineraries');
-    
-    if (allResponse.status() !== 200) {
-      throw new Error(`Expected 200, got ${allResponse.status()}`);
+    const destinationsText = await firstCard.locator('[data-testid^="itinerary-destinations-"]').textContent();
+    if (!destinationsText.includes('2')) {
+      throw new Error(`Expected 2 destinations, but got '${destinationsText}'`);
     }
+    console.log('✓ Verified itinerary shows 2 destinations');
     
-    const allItineraries = await allResponse.json();
+    console.log('\nTest 4: View itinerary details');
+    await firstCard.locator('[data-testid^="itinerary-title-"]').click();
+    await page.waitForSelector('[data-testid="itinerary-detail-page"]', { timeout: 5000 });
+    console.log('✓ Navigated to itinerary detail page');
     
-    if (Array.isArray(allItineraries) && allItineraries.length >= 1) {
-      console.log(`✓ Retrieved ${allItineraries.length} itinerary/itineraries`);
-    } else {
-      throw new Error(`Expected array with at least 1 itinerary, got ${JSON.stringify(allItineraries)}`);
+    const detailTitle = await page.locator('[data-testid="itinerary-title"]').textContent();
+    if (!detailTitle.includes('European Adventure')) {
+      throw new Error(`Expected detail title to be 'European Adventure', but got '${detailTitle}'`);
     }
+    console.log('✓ Verified detail page title');
     
-    // Test 4: Create second itinerary to verify multiple storage
-    console.log('Test 4: Create second itinerary');
-    const createResponse2 = await page.request.post('http://localhost:5000/api/itineraries', {
-      data: {
-        title: 'Asian Journey',
-        description: 'Exploring the Far East',
-        destinations: [
-          { id: 'tokyo', name: 'Tokyo', country: 'Japan' },
-          { id: 'bali', name: 'Bali', country: 'Indonesia' }
-        ]
-      }
-    });
-    
-    const createdItinerary2 = await createResponse2.json();
-    
-    if (createResponse2.status() === 201) {
-      console.log('✓ Second itinerary created successfully');
+    const destinationsList = await page.locator('[data-testid="destinations-list"]');
+    const destinationItems = await destinationsList.locator('[data-testid^="destination-item-"]').all();
+    if (destinationItems.length !== 2) {
+      throw new Error(`Expected 2 destination items, but found ${destinationItems.length}`);
     }
+    console.log('✓ Verified detail page shows 2 destinations');
     
-    // Test 5: Verify both exist
-    console.log('Test 5: Verify both itineraries exist in storage');
-    const allResponse2 = await page.request.get('http://localhost:5000/api/itineraries');
-    const allItineraries2 = await allResponse2.json();
-    
-    if (allItineraries2.length >= 2) {
-      console.log(`✓ Found ${allItineraries2.length} itineraries in storage`);
-    } else {
-      throw new Error(`Expected at least 2 itineraries, got ${allItineraries2.length}`);
+    const parisName = await destinationsList.locator('[data-testid="destination-name-paris"]').textContent();
+    if (!parisName.includes('Paris')) {
+      throw new Error(`Expected destination name 'Paris', but got '${parisName}'`);
     }
+    console.log('✓ Verified Paris is in the destinations list');
     
-    // Test 6: Delete itinerary
-    console.log('Test 6: Delete itinerary via DELETE /api/itineraries/:id');
-    const deleteResponse = await page.request.delete(`http://localhost:5000/api/itineraries/${createdItineraryId}`);
-    
-    if (deleteResponse.status() !== 204) {
-      throw new Error(`Expected 204, got ${deleteResponse.status()}`);
+    const romeCountry = await destinationsList.locator('[data-testid="destination-country-rome"]').textContent();
+    if (!romeCountry.includes('Italy')) {
+      throw new Error(`Expected destination country 'Italy', but got '${romeCountry}'`);
     }
+    console.log('✓ Verified Rome shows correct country');
     
-    console.log('✓ Itinerary deleted successfully');
+    console.log('\nTest 5: Navigate back and create second itinerary');
+    await page.click('[data-testid="button-back"]');
+    await page.waitForSelector('[data-testid="itineraries-page"]', { timeout: 5000 });
+    console.log('✓ Navigated back to itineraries list');
     
-    // Test 7: Verify deletion
-    console.log('Test 7: Verify itinerary no longer exists');
-    const getAfterDelete = await page.request.get(`http://localhost:5000/api/itineraries/${createdItineraryId}`);
+    await page.click('[data-testid="button-create-itinerary"]');
+    await page.waitForSelector('[data-testid="create-itinerary-page"]', { timeout: 5000 });
     
-    if (getAfterDelete.status() === 404) {
-      console.log('✓ Deleted itinerary returns 404 as expected');
-    } else {
-      throw new Error(`Expected 404 after deletion, got ${getAfterDelete.status()}`);
+    await page.fill('[data-testid="input-title"]', 'Asian Journey');
+    await page.click('[data-testid="select-destination"]');
+    await page.waitForSelector('[data-testid="destination-option-tokyo"]', { timeout: 2000 });
+    await page.click('[data-testid="destination-option-tokyo"]');
+    await page.click('[data-testid="button-add-destination"]');
+    
+    await page.click('[data-testid="button-submit"]');
+    await page.waitForSelector('[data-testid="itineraries-page"]', { timeout: 5000 });
+    console.log('✓ Created second itinerary');
+    
+    console.log('\nTest 6: Verify both itineraries exist');
+    const allCards = await page.locator('[data-testid^="itinerary-card-"]').all();
+    if (allCards.length < 2) {
+      throw new Error(`Expected at least 2 itinerary cards, but found ${allCards.length}`);
     }
+    console.log(`✓ Verified ${allCards.length} itineraries exist in storage`);
     
-    // Test 8: Test validation error
-    console.log('Test 8: Test validation error with invalid data');
-    const invalidResponse = await page.request.post('http://localhost:5000/api/itineraries', {
-      data: {
-        title: 'Missing Destinations'
-        // Missing required destinations field
-      }
-    });
+    console.log('\nTest 7: Delete first itinerary through UI');
+    page.once('dialog', dialog => dialog.accept());
     
-    if (invalidResponse.status() === 400) {
-      console.log('✓ Validation error returns 400 as expected');
-    } else {
-      throw new Error(`Expected 400 for invalid data, got ${invalidResponse.status()}`);
+    const firstItineraryCard = allCards[0];
+    await firstItineraryCard.locator('[data-testid^="button-delete-"]').click();
+    
+    await page.waitForTimeout(1000);
+    console.log('✓ Clicked delete button and confirmed');
+    
+    console.log('\nTest 8: Verify itinerary was deleted');
+    const remainingCards = await page.locator('[data-testid^="itinerary-card-"]').all();
+    if (remainingCards.length >= allCards.length) {
+      throw new Error(`Expected fewer cards after deletion, but still have ${remainingCards.length}`);
     }
+    console.log(`✓ Verified itinerary was deleted (${remainingCards.length} remaining)`);
     
-    console.log('\n✅ All Itinerary CRUD tests passed!\n');
+    console.log('\nTest 9: Test form validation - try to submit without destinations');
+    await page.click('[data-testid="button-create-itinerary"]');
+    await page.waitForSelector('[data-testid="create-itinerary-page"]', { timeout: 5000 });
+    
+    await page.fill('[data-testid="input-title"]', 'Missing Destinations');
+    await page.click('[data-testid="button-submit"]');
+    
+    await page.waitForTimeout(500);
+    
+    const stillOnCreatePage = await page.locator('[data-testid="create-itinerary-page"]').isVisible();
+    if (!stillOnCreatePage) {
+      throw new Error('Expected to stay on create page when validation fails, but was redirected');
+    }
+    console.log('✓ Form validation prevented submission without destinations');
+    
+    console.log('\n✅ All End-to-End Itinerary CRUD tests passed!\n');
+    console.log('📊 Test Summary:');
+    console.log('   - Created itinerary through UI ✓');
+    console.log('   - Verified data persistence ✓');
+    console.log('   - Viewed itinerary details ✓');
+    console.log('   - Deleted itinerary ✓');
+    console.log('   - Validated form inputs ✓');
+    console.log('   - Full user journey tested ✓\n');
     
   } catch (error) {
     console.error('\n❌ Test failed:', error.message);
+    if (error.stack) {
+      console.error('\nStack trace:', error.stack);
+    }
     process.exit(1);
   } finally {
     if (browser) {
@@ -145,5 +183,8 @@ async function testItineraryCRUD() {
   }
 }
 
-console.log('Starting Itinerary CRUD tests...\n');
+console.log('╔══════════════════════════════════════════════════╗');
+console.log('║  End-to-End Itinerary CRUD Test Suite          ║');
+console.log('║  Testing complete user journey through the UI   ║');
+console.log('╚══════════════════════════════════════════════════╝\n');
 testItineraryCRUD();
