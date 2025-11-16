@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Toaster } from "@/components/ui/toaster";
 import{ supabase } from "@/lib/supabaseClient";
+import { MapDialog } from "@/components/MapDialog";
 import Home from "@/pages/Home";
 import Forum from "@/pages/Forum";
 import SignIn from "@/pages/SignIn";
@@ -13,10 +14,10 @@ import ItinerariesPage from "@/pages/ItinerariesPage";
 import CreateItineraryPage from "@/pages/CreateItineraryPage";
 import ItineraryDetailPage from "@/pages/ItineraryDetailPage";
 
-function Router() {
+function Router({ onOpenMap }) {
   return (
     <Switch>
-      <Route path="/" component={Home} />
+      <Route path="/">{() => <Home onOpenMap={onOpenMap} />}</Route>
       <Route path="/forum" component={Forum} />
       <Route path="/signin" component={SignIn} />
       <Route path="/signup" component={SignUp} />
@@ -31,6 +32,7 @@ function Router() {
 
 export default function App() {
   const [user, setUser] = useState(null);
+  const [isMapOpen, setIsMapOpen] = useState(false);
   const [, setLocation] = useLocation();
 
   useEffect(() => {
@@ -100,8 +102,11 @@ export default function App() {
 
         {/* Page content */}
         <main className="flex-1">
-          <Router />
+          <Router onOpenMap={() => setIsMapOpen(true)} />
         </main>
+
+        {/* Global Map Dialog - accessible from all pages */}
+        <MapDialog open={isMapOpen} onOpenChange={setIsMapOpen} />
       </div>
       <Toaster />
     </ThemeProvider>

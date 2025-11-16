@@ -3,7 +3,7 @@ import { ArrowRight, Map } from "lucide-react";
 import { Link } from "wouter";
 import heroBackground from "@assets/generated_images/Modern_hero_background_gradient_fbe282f2.png";
 
-export function Hero() {
+export function Hero({ onOpenMap }) {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image */}
@@ -40,17 +40,16 @@ export function Hero() {
             </Button>
           </Link>
           
-          <Link href="/itineraries">
-            <Button 
-              variant="outline" 
-              size="lg"
-              className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm"
-              data-testid="button-hero-watch-demo"
-            >
-              <Map className="mr-2 h-5 w-5" />
-              Interactive Map
-            </Button>
-          </Link>
+          <Button 
+            variant="outline" 
+            size="lg"
+            className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm"
+            onClick={onOpenMap}
+            data-testid="button-hero-watch-demo"
+          >
+            <Map className="mr-2 h-5 w-5" />
+            Interactive Map
+          </Button>
         </div>
         
         {/* Stats */}
