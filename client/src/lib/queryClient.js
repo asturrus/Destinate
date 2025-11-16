@@ -4,7 +4,13 @@ export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       queryFn: async ({ queryKey }) => {
-        const res = await fetch(queryKey[0]);
+        let url;
+        if (Array.isArray(queryKey) && queryKey.length > 1) {
+          url = queryKey.join('/');
+        } else {
+          url = queryKey[0];
+        }
+        const res = await fetch(url);
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
         }

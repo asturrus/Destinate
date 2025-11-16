@@ -11,7 +11,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { apiRequest } from "@/lib/queryClient";
+import { queryClient, apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { destinations } from "@shared/destinations";
 
@@ -37,6 +37,7 @@ export default function CreateItineraryPage() {
   const createMutation = useMutation({
     mutationFn: (data) => apiRequest('POST', '/api/itineraries', data),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/itineraries'] });
       toast({
         title: "Success!",
         description: "Your itinerary has been created.",

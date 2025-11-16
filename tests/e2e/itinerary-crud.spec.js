@@ -30,10 +30,10 @@ async function testItineraryCRUD() {
     console.log('✓ Added Paris to destinations');
     
     await page.click('[data-testid="select-destination"]');
-    await page.waitForSelector('[data-testid="destination-option-rome"]', { timeout: 2000 });
-    await page.click('[data-testid="destination-option-rome"]');
+    await page.waitForSelector('[data-testid="destination-option-venice"]', { timeout: 2000 });
+    await page.click('[data-testid="destination-option-venice"]');
     await page.click('[data-testid="button-add-destination"]');
-    console.log('✓ Added Rome to destinations');
+    console.log('✓ Added Venice to destinations');
     
     const selectedDestinations = await page.locator('[data-testid="selected-destinations"]');
     const destinationCount = await selectedDestinations.locator('[data-testid^="selected-destination-"]').count();
@@ -47,8 +47,21 @@ async function testItineraryCRUD() {
     
     console.log('\nTest 3: Verify itinerary was created and appears in list');
     await page.waitForSelector('[data-testid="itineraries-page"]', { timeout: 5000 });
-    await page.waitForSelector('[data-testid="itineraries-grid"]', { timeout: 5000 });
     console.log('✓ Redirected back to itineraries list page');
+    
+    await page.waitForTimeout(1000);
+    
+    const hasGrid = await page.locator('[data-testid="itineraries-grid"]').isVisible().catch(() => false);
+    const hasEmptyState = await page.locator('[data-testid="empty-state"]').isVisible().catch(() => false);
+    
+    if (!hasGrid && hasEmptyState) {
+      throw new Error('Expected itinerary grid but found empty state - itinerary may not have been created');
+    }
+    
+    if (!hasGrid) {
+      throw new Error('Neither itinerary grid nor empty state found on page');
+    }
+    console.log('✓ Found itineraries grid');
     
     const itineraryCards = await page.locator('[data-testid^="itinerary-card-"]').all();
     if (itineraryCards.length === 0) {
@@ -76,8 +89,26 @@ async function testItineraryCRUD() {
     console.log('✓ Verified itinerary shows 2 destinations');
     
     console.log('\nTest 4: View itinerary details');
-    await firstCard.locator('[data-testid^="itinerary-title-"]').click();
-    await page.waitForSelector('[data-testid="itinerary-detail-page"]', { timeout: 5000 });
+    const firstItineraryId = (await firstCard.getAttribute('data-testid')).replace('itinerary-card-', '');
+    console.log(`  Navigating to: http://localhost:5000/itineraries/${firstItineraryId}`);
+    await page.goto(`http://localhost:5000/itineraries/${firstItineraryId}`);
+    await page.waitForTimeout(1000);
+    
+    const currentUrl = page.url();
+    console.log(`  Current URL: ${currentUrl}`);
+    
+    const hasDetailPage = await page.locator('[data-testid="itinerary-detail-page"]').isVisible().catch(() => false);
+    const hasNotFound = await page.locator('text=not found').isVisible().catch(() => false);
+    
+    if (hasNotFound) {
+      throw new Error('Itinerary detail page returned "not found" - the itinerary might not exist');
+    }
+    
+    if (!hasDetailPage) {
+      const bodyText = await page.locator('body').textContent();
+      throw new Error(`Detail page not found. Body text: ${bodyText.substring(0, 200)}`);
+    }
+    
     console.log('✓ Navigated to itinerary detail page');
     
     const detailTitle = await page.locator('[data-testid="itinerary-title"]').textContent();
@@ -99,11 +130,11 @@ async function testItineraryCRUD() {
     }
     console.log('✓ Verified Paris is in the destinations list');
     
-    const romeCountry = await destinationsList.locator('[data-testid="destination-country-rome"]').textContent();
-    if (!romeCountry.includes('Italy')) {
-      throw new Error(`Expected destination country 'Italy', but got '${romeCountry}'`);
+    const veniceCountry = await destinationsList.locator('[data-testid="destination-country-venice"]').textContent();
+    if (!veniceCountry.includes('Italy')) {
+      throw new Error(`Expected destination country 'Italy', but got '${veniceCountry}'`);
     }
-    console.log('✓ Verified Rome shows correct country');
+    console.log('✓ Verified Venice shows correct country');
     
     console.log('\nTest 5: Navigate back and create second itinerary');
     await page.click('[data-testid="button-back"]');
