@@ -3,10 +3,10 @@ import { ForumHero } from "@/components/ForumHero";
 import { Footer } from "@/components/Footer";
 import { PopularDiscussions } from "@/components/PopularDiscussions";
 
-export default function Forum({ onOpenMap }) {
+export default function Forum() {
   return (
     <div id="forum" className="min-h-screen bg-background">
-      <Header onOpenMap={onOpenMap} />
+      <Header />
       <main>
         <ForumHero />
         <PopularDiscussions />
