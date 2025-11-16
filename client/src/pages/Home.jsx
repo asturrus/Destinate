@@ -5,12 +5,12 @@ import { Footer } from "@/components/Footer";
 import { AboutUs } from "@/components/AboutUs";
 
 
-export default function Home({ onOpenMap }) {
+export default function Home() {
   return (
     <div className="min-h-screen bg-background">
-      <Header onOpenMap={onOpenMap} />
+      <Header />
       <main>
-        <Hero onOpenMap={onOpenMap} />
+        <Hero />
         <Features />
         <AboutUs />
       </main>
