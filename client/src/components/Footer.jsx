@@ -31,7 +31,7 @@ export function Footer() {
   };
 
   return (
-    <footer id="about" className="bg-muted/30 border-t">
+    <footer className="bg-muted/30 border-t">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Company Info */}

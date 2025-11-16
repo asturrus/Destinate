@@ -1,0 +1,75 @@
+import { chromium } from 'playwright';
+
+async function testAboutUs() {
+  let browser;
+  let page;
+  
+  try {
+    console.log('Starting browser...');
+    browser = await chromium.launch({ headless: true });
+    page = await browser.newPage();
+    
+    console.log('Navigating to home page...');
+    await page.goto('http://localhost:5000');
+    
+    console.log('Scrolling to about section...');
+    await page.locator('#about').scrollIntoViewIfNeeded();
+    
+    const aboutUs = page.locator('[data-testid="about-us"]');
+    await aboutUs.waitFor({ timeout: 5000 });
+    console.log('✓ AboutUs component renders');
+    
+    // Mission section
+    const missionText = await page.locator('[data-testid="mission-section"]').textContent();
+    if (missionText.includes('Our Purpose') && missionText.includes('dream trips')) {
+      console.log('✓ Mission section displays correct content');
+    }
+    
+    // Features section
+    const featuresText = await page.locator('[data-testid="features-section"]').textContent();
+    if (featuresText.includes('Core Features') && featuresText.includes('itineraries')) {
+      console.log('✓ Features section displays correct content');
+    }
+    
+    // Team section
+    const teamText = await page.locator('[data-testid="team-section"]').textContent();
+    if (teamText.includes('Meet the Team')) {
+      console.log('✓ Team section header displays');
+    }
+    
+    // Team members
+    const ethanText = await page.locator('[data-testid="team-member-ethan"]').textContent();
+    const anthonyText = await page.locator('[data-testid="team-member-anthony"]').textContent();
+    const christianText = await page.locator('[data-testid="team-member-christian"]').textContent();
+    
+    if (ethanText.includes('Ethan Jin') && 
+        anthonyText.includes('Anthony Sturrus') && 
+        christianText.includes('Christian Barajas')) {
+      console.log('✓ All team members display with correct names');
+    }
+    
+    // Contact links
+    const emailHref = await page.locator('[data-testid="email-link"]').getAttribute('href');
+    if (emailHref === 'mailto:team@destinate.com') {
+      console.log('✓ Email link is correct');
+    }
+    
+    const githubHref = await page.locator('[data-testid="github-link"]').getAttribute('href');
+    if (githubHref === 'https://github.com/asturrus/Destinate') {
+      console.log('✓ GitHub link is correct');
+    }
+    
+    console.log('\n:white_check_mark: All AboutUs tests passed!\n');
+    
+  } catch (error) {
+    console.error('\n:x: Test failed:', error.message);
+    process.exit(1);
+  } finally {
+    if (browser) {
+      await browser.close();
+    }
+  }
+}
+
+console.log('Starting AboutUs tests...\n');
+testAboutUs();
