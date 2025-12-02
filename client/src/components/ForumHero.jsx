@@ -3,7 +3,6 @@ export function ForumHero() {
   const destinations = [
     {name: "Tokyo, Japan", img: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&q=80"},
     {name: "Venice, Italy", img: "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=800&q=80"},
-    {name: "Paris, France", img: "https://images.unsplash.com/photo-1502602898536-47ad22581b52?w=800&q=80"},
     {name: "London, England", img: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800&q=80"},
     {name: "Amsterdam, Netherlands", img: "https://images.unsplash.com/photo-1583422409516-2895a77efded?w=800&q=80"},
     {name: "Santorini, Greece", img: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=800&q=80"},
@@ -37,7 +36,7 @@ export function ForumHero() {
         <h2 className="text-xl md:text-2xl font-bold mb-6 text-center">
           Popular Destinations
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-6" data-testid="destinations-grid">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-5" data-testid="destinations-grid">
           {destinations.map((dest, i) => (
             <div
               key={i}
