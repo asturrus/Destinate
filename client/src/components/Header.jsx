@@ -7,7 +7,6 @@ export function Header() {
     { name: 'Home', href: '/' },
     { name: 'Destinations', href: '#features' },
     { name: 'Forum', href: '/forum' },
-    { name: 'Stocks', href: '/stock-management'},
     { name: 'About', href: '#about' },
   ];
 
