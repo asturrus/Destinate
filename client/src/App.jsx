@@ -25,6 +25,7 @@ function Router({ onOpenMap }) {
       <Route path="/itineraries" component={ItinerariesPage} />
       <Route path="/itineraries/create" component={CreateItineraryPage} />
       <Route path="/itineraries/:id" component={ItineraryDetailPage} />
+      <Route path="/stock-management"/>
       {/* Future routes can be added here */}
     </Switch>
   );
