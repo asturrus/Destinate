@@ -36,12 +36,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get single itinerary
+  // Get single itinerary (requires userId query param to verify ownership)
   app.get("/api/itineraries/:id", async (req, res) => {
     try {
+      const userId = req.query.userId as string;
+      if (!userId) {
+        return res.status(400).json({ message: "userId is required" });
+      }
       const itinerary = await storage.getItinerary(req.params.id);
       if (!itinerary) {
         return res.status(404).json({ message: "Itinerary not found" });
+      }
+      if (itinerary.userId !== userId) {
+        return res.status(403).json({ message: "Access denied" });
       }
       res.json(itinerary);
     } catch (error: any) {
@@ -60,9 +67,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Delete itinerary
+  // Delete itinerary (requires userId query param to verify ownership)
   app.delete("/api/itineraries/:id", async (req, res) => {
     try {
+      const userId = req.query.userId as string;
+      if (!userId) {
+        return res.status(400).json({ message: "userId is required" });
+      }
+      const itinerary = await storage.getItinerary(req.params.id);
+      if (!itinerary) {
+        return res.status(404).json({ message: "Itinerary not found" });
+      }
+      if (itinerary.userId !== userId) {
+        return res.status(403).json({ message: "Access denied" });
+      }
       const deleted = await storage.deleteItinerary(req.params.id);
       if (!deleted) {
         return res.status(404).json({ message: "Itinerary not found" });

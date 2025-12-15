@@ -1,24 +1,60 @@
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useRoute, Link } from "wouter";
+import { useRoute, Link, useLocation } from "wouter";
 import { ArrowLeft, MapPin, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { supabase } from "@/lib/supabaseClient";
+import { useToast } from "@/hooks/use-toast";
 
 export default function ItineraryDetailPage() {
   const [, params] = useRoute("/itineraries/:id");
   const itineraryId = params?.id;
+  const [, setLocation] = useLocation();
+  const { toast } = useToast();
+  const [user, setUser] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      const currentUser = data?.session?.user ?? null;
+      setUser(currentUser);
+      setAuthLoading(false);
+      if (!currentUser) {
+        toast({
+          title: "Sign in required",
+          description: "Please sign in to view this itinerary",
+          variant: "destructive",
+        });
+        setLocation("/signin");
+      }
+    });
+  }, [setLocation, toast]);
 
   const { data: itinerary, isLoading, error } = useQuery({
-    queryKey: ['/api/itineraries', itineraryId],
-    enabled: !!itineraryId,
+    queryKey: ['/api/itineraries', itineraryId, user?.id],
+    queryFn: async () => {
+      if (!user?.id) return null;
+      const res = await fetch(`/api/itineraries/${itineraryId}?userId=${user.id}`);
+      if (!res.ok) {
+        if (res.status === 403) throw new Error('Access denied');
+        throw new Error('Itinerary not found');
+      }
+      return res.json();
+    },
+    enabled: !!itineraryId && !!user?.id,
   });
 
-  if (isLoading) {
+  if (authLoading || isLoading) {
     return (
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="text-center">Loading itinerary...</div>
+        <div className="text-center">Loading...</div>
       </div>
     );
+  }
+
+  if (!user) {
+    return null;
   }
 
   if (error || !itinerary) {
@@ -28,7 +64,7 @@ export default function ItineraryDetailPage() {
           <CardHeader>
             <CardTitle>Itinerary not found</CardTitle>
             <CardDescription>
-              The itinerary you're looking for doesn't exist.
+              The itinerary you're looking for doesn't exist or you don't have access to it.
             </CardDescription>
           </CardHeader>
           <CardContent>

@@ -42,9 +42,15 @@ export default function ItinerariesPage() {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (id) => apiRequest('DELETE', `/api/itineraries/${id}`),
+    mutationFn: async (id) => {
+      const res = await fetch(`/api/itineraries/${id}?userId=${user?.id}`, {
+        method: 'DELETE',
+      });
+      if (!res.ok) throw new Error('Failed to delete');
+      return res;
+    },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/itineraries'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/itineraries', user?.id] });
       toast({
         title: "Itinerary deleted",
         description: "Your itinerary has been removed.",
@@ -65,12 +71,16 @@ export default function ItinerariesPage() {
     }
   };
 
-  if (isLoading) {
+  if (authLoading || isLoading) {
     return (
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="text-center">Loading itineraries...</div>
+        <div className="text-center">Loading...</div>
       </div>
     );
+  }
+
+  if (!user) {
+    return null;
   }
 
   return (
