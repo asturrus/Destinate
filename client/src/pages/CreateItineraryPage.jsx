@@ -54,7 +54,23 @@ export default function CreateItineraryPage() {
   });
 
   const createMutation = useMutation({
-    mutationFn: (data) => apiRequest('POST', '/api/itineraries', data),
+    mutationFn: async (data) => {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData?.session?.access_token;
+      const res = await fetch('/api/itineraries', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) {
+        const error = await res.json().catch(() => ({ message: 'Request failed' }));
+        throw new Error(error.message || 'Failed to create itinerary');
+      }
+      return res.json();
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/itineraries'] });
       toast({
@@ -121,7 +137,6 @@ export default function CreateItineraryPage() {
 
     createMutation.mutate({
       ...data,
-      userId: user.id,
       destinations: selectedDestinations,
     });
   };

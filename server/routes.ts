@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertItinerarySchema } from "@shared/schema";
 import { destinations } from "@shared/destinations";
+import { authMiddleware, type AuthenticatedRequest } from "./auth";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Destination search endpoint
@@ -22,13 +23,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json(filtered);
   });
 
-  // Get itineraries by user (requires userId query param)
-  app.get("/api/itineraries", async (req, res) => {
+  // Get itineraries by user (requires auth)
+  app.get("/api/itineraries", authMiddleware, async (req: AuthenticatedRequest, res) => {
     try {
-      const userId = req.query.userId as string;
-      if (!userId) {
-        return res.status(400).json({ message: "userId is required" });
-      }
+      const userId = req.userId!;
       const itineraries = await storage.getItinerariesByUserId(userId);
       res.json(itineraries);
     } catch (error: any) {
@@ -36,13 +34,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get single itinerary (requires userId query param to verify ownership)
-  app.get("/api/itineraries/:id", async (req, res) => {
+  // Get single itinerary (requires auth, verifies ownership)
+  app.get("/api/itineraries/:id", authMiddleware, async (req: AuthenticatedRequest, res) => {
     try {
-      const userId = req.query.userId as string;
-      if (!userId) {
-        return res.status(400).json({ message: "userId is required" });
-      }
+      const userId = req.userId!;
       const itinerary = await storage.getItinerary(req.params.id);
       if (!itinerary) {
         return res.status(404).json({ message: "Itinerary not found" });
@@ -56,10 +51,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Create itinerary
-  app.post("/api/itineraries", async (req, res) => {
+  // Create itinerary (requires auth, userId comes from token)
+  app.post("/api/itineraries", authMiddleware, async (req: AuthenticatedRequest, res) => {
     try {
-      const validatedData = insertItinerarySchema.parse(req.body);
+      const userId = req.userId!;
+      const body = { ...req.body, userId };
+      const validatedData = insertItinerarySchema.parse(body);
       const itinerary = await storage.createItinerary(validatedData);
       res.status(201).json(itinerary);
     } catch (error: any) {
@@ -67,13 +64,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Delete itinerary (requires userId query param to verify ownership)
-  app.delete("/api/itineraries/:id", async (req, res) => {
+  // Delete itinerary (requires auth, verifies ownership)
+  app.delete("/api/itineraries/:id", authMiddleware, async (req: AuthenticatedRequest, res) => {
     try {
-      const userId = req.query.userId as string;
-      if (!userId) {
-        return res.status(400).json({ message: "userId is required" });
-      }
+      const userId = req.userId!;
       const itinerary = await storage.getItinerary(req.params.id);
       if (!itinerary) {
         return res.status(404).json({ message: "Itinerary not found" });

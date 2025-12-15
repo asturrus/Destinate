@@ -34,7 +34,13 @@ export default function ItinerariesPage() {
     queryKey: ['/api/itineraries', user?.id],
     queryFn: async () => {
       if (!user?.id) return [];
-      const res = await fetch(`/api/itineraries?userId=${user.id}`);
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData?.session?.access_token;
+      const res = await fetch('/api/itineraries', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
       if (!res.ok) throw new Error('Failed to fetch itineraries');
       return res.json();
     },
@@ -43,8 +49,13 @@ export default function ItinerariesPage() {
 
   const deleteMutation = useMutation({
     mutationFn: async (id) => {
-      const res = await fetch(`/api/itineraries/${id}?userId=${user?.id}`, {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData?.session?.access_token;
+      const res = await fetch(`/api/itineraries/${id}`, {
         method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
       });
       if (!res.ok) throw new Error('Failed to delete');
       return res;

@@ -35,7 +35,13 @@ export default function ItineraryDetailPage() {
     queryKey: ['/api/itineraries', itineraryId, user?.id],
     queryFn: async () => {
       if (!user?.id) return null;
-      const res = await fetch(`/api/itineraries/${itineraryId}?userId=${user.id}`);
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData?.session?.access_token;
+      const res = await fetch(`/api/itineraries/${itineraryId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
       if (!res.ok) {
         if (res.status === 403) throw new Error('Access denied');
         throw new Error('Itinerary not found');
