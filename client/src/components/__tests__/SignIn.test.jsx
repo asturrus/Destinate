@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import SignIn from '../../pages/SignIn';
 
 // Mock wouter
@@ -11,6 +11,22 @@ vi.mock('wouter', () => ({
 // Mock ThemeToggle
 vi.mock('../../components/ThemeToggle', () => ({
   ThemeToggle: () => <button data-testid="button-theme-toggle">Theme Toggle</button>
+}));
+
+// Mock Supabase client
+vi.mock('../../lib/supabaseClient', () => ({
+  supabase: {
+    auth: {
+      signInWithPassword: vi.fn().mockResolvedValue({
+        data: { user: { id: '123', email: 'test@example.com' } },
+        error: null,
+      }),
+      getSession: vi.fn().mockResolvedValue({ data: { session: null } }),
+      onAuthStateChange: vi.fn().mockReturnValue({
+        data: { subscription: { unsubscribe: vi.fn() } }
+      }),
+    },
+  },
 }));
 
 describe('SignIn Page', () => {
