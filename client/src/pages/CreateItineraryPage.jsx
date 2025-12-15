@@ -11,10 +11,11 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { queryClient, apiRequest } from "@/lib/queryClient";
+import { queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { destinations } from "@shared/destinations";
 import { supabase } from "@/lib/supabaseClient";
+import { itineraryService } from "@/lib/itineraryService";
 
 const formSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -54,25 +55,9 @@ export default function CreateItineraryPage() {
   });
 
   const createMutation = useMutation({
-    mutationFn: async (data) => {
-      const { data: sessionData } = await supabase.auth.getSession();
-      const token = sessionData?.session?.access_token;
-      const res = await fetch('/api/itineraries', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(data),
-      });
-      if (!res.ok) {
-        const error = await res.json().catch(() => ({ message: 'Request failed' }));
-        throw new Error(error.message || 'Failed to create itinerary');
-      }
-      return res.json();
-    },
+    mutationFn: (data) => itineraryService.create(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/itineraries'] });
+      queryClient.invalidateQueries({ queryKey: ['itineraries'] });
       toast({
         title: "Success!",
         description: "Your itinerary has been created.",

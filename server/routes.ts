@@ -1,9 +1,6 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import { storage } from "./storage";
-import { insertItinerarySchema } from "@shared/schema";
 import { destinations } from "@shared/destinations";
-import { authMiddleware, type AuthenticatedRequest } from "./auth";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Destination search endpoint
@@ -21,68 +18,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     );
     
     res.json(filtered);
-  });
-
-  // Get itineraries by user (requires auth)
-  app.get("/api/itineraries", authMiddleware, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.userId!;
-      const itineraries = await storage.getItinerariesByUserId(userId);
-      res.json(itineraries);
-    } catch (error: any) {
-      res.status(500).json({ message: error.message });
-    }
-  });
-
-  // Get single itinerary (requires auth, verifies ownership)
-  app.get("/api/itineraries/:id", authMiddleware, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.userId!;
-      const itinerary = await storage.getItinerary(req.params.id);
-      if (!itinerary) {
-        return res.status(404).json({ message: "Itinerary not found" });
-      }
-      if (itinerary.userId !== userId) {
-        return res.status(403).json({ message: "Access denied" });
-      }
-      res.json(itinerary);
-    } catch (error: any) {
-      res.status(500).json({ message: error.message });
-    }
-  });
-
-  // Create itinerary (requires auth, userId comes from token)
-  app.post("/api/itineraries", authMiddleware, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.userId!;
-      const body = { ...req.body, userId };
-      const validatedData = insertItinerarySchema.parse(body);
-      const itinerary = await storage.createItinerary(validatedData);
-      res.status(201).json(itinerary);
-    } catch (error: any) {
-      res.status(400).json({ message: error.message });
-    }
-  });
-
-  // Delete itinerary (requires auth, verifies ownership)
-  app.delete("/api/itineraries/:id", authMiddleware, async (req: AuthenticatedRequest, res) => {
-    try {
-      const userId = req.userId!;
-      const itinerary = await storage.getItinerary(req.params.id);
-      if (!itinerary) {
-        return res.status(404).json({ message: "Itinerary not found" });
-      }
-      if (itinerary.userId !== userId) {
-        return res.status(403).json({ message: "Access denied" });
-      }
-      const deleted = await storage.deleteItinerary(req.params.id);
-      if (!deleted) {
-        return res.status(404).json({ message: "Itinerary not found" });
-      }
-      res.status(204).send();
-    } catch (error: any) {
-      res.status(500).json({ message: error.message });
-    }
   });
 
   const httpServer = createServer(app);

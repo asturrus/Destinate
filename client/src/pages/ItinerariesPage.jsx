@@ -4,9 +4,10 @@ import { Link, useLocation } from "wouter";
 import { Plus, Trash2, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { queryClient, apiRequest } from "@/lib/queryClient";
+import { queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/lib/supabaseClient";
+import { itineraryService } from "@/lib/itineraryService";
 
 export default function ItinerariesPage() {
   const { toast } = useToast();
@@ -31,37 +32,15 @@ export default function ItinerariesPage() {
   }, [setLocation, toast]);
 
   const { data: itineraries, isLoading } = useQuery({
-    queryKey: ['/api/itineraries', user?.id],
-    queryFn: async () => {
-      if (!user?.id) return [];
-      const { data: sessionData } = await supabase.auth.getSession();
-      const token = sessionData?.session?.access_token;
-      const res = await fetch('/api/itineraries', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      if (!res.ok) throw new Error('Failed to fetch itineraries');
-      return res.json();
-    },
+    queryKey: ['itineraries', user?.id],
+    queryFn: () => itineraryService.getAll(),
     enabled: !!user?.id,
   });
 
   const deleteMutation = useMutation({
-    mutationFn: async (id) => {
-      const { data: sessionData } = await supabase.auth.getSession();
-      const token = sessionData?.session?.access_token;
-      const res = await fetch(`/api/itineraries/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      if (!res.ok) throw new Error('Failed to delete');
-      return res;
-    },
+    mutationFn: (id) => itineraryService.delete(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/itineraries', user?.id] });
+      queryClient.invalidateQueries({ queryKey: ['itineraries', user?.id] });
       toast({
         title: "Itinerary deleted",
         description: "Your itinerary has been removed.",

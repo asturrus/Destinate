@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/lib/supabaseClient";
 import { useToast } from "@/hooks/use-toast";
+import { itineraryService } from "@/lib/itineraryService";
 
 export default function ItineraryDetailPage() {
   const [, params] = useRoute("/itineraries/:id");
@@ -32,22 +33,8 @@ export default function ItineraryDetailPage() {
   }, [setLocation, toast]);
 
   const { data: itinerary, isLoading, error } = useQuery({
-    queryKey: ['/api/itineraries', itineraryId, user?.id],
-    queryFn: async () => {
-      if (!user?.id) return null;
-      const { data: sessionData } = await supabase.auth.getSession();
-      const token = sessionData?.session?.access_token;
-      const res = await fetch(`/api/itineraries/${itineraryId}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      if (!res.ok) {
-        if (res.status === 403) throw new Error('Access denied');
-        throw new Error('Itinerary not found');
-      }
-      return res.json();
-    },
+    queryKey: ['itineraries', itineraryId],
+    queryFn: () => itineraryService.getById(itineraryId),
     enabled: !!itineraryId && !!user?.id,
   });
 
