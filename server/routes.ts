@@ -22,10 +22,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json(filtered);
   });
 
-  // Get all itineraries
+  // Get itineraries by user (requires userId query param)
   app.get("/api/itineraries", async (req, res) => {
     try {
-      const itineraries = await storage.getAllItineraries();
+      const userId = req.query.userId as string;
+      if (!userId) {
+        return res.status(400).json({ message: "userId is required" });
+      }
+      const itineraries = await storage.getItinerariesByUserId(userId);
       res.json(itineraries);
     } catch (error: any) {
       res.status(500).json({ message: error.message });

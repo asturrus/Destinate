@@ -1,16 +1,44 @@
+import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Plus, Trash2, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function ItinerariesPage() {
   const { toast } = useToast();
+  const [, setLocation] = useLocation();
+  const [user, setUser] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      const currentUser = data?.session?.user ?? null;
+      setUser(currentUser);
+      setAuthLoading(false);
+      if (!currentUser) {
+        toast({
+          title: "Sign in required",
+          description: "Please sign in to view your itineraries",
+          variant: "destructive",
+        });
+        setLocation("/signin");
+      }
+    });
+  }, [setLocation, toast]);
 
   const { data: itineraries, isLoading } = useQuery({
-    queryKey: ['/api/itineraries'],
+    queryKey: ['/api/itineraries', user?.id],
+    queryFn: async () => {
+      if (!user?.id) return [];
+      const res = await fetch(`/api/itineraries?userId=${user.id}`);
+      if (!res.ok) throw new Error('Failed to fetch itineraries');
+      return res.json();
+    },
+    enabled: !!user?.id,
   });
 
   const deleteMutation = useMutation({

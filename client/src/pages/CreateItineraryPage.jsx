@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { destinations } from "@shared/destinations";
+import { supabase } from "@/lib/supabaseClient";
 
 const formSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -25,6 +26,24 @@ export default function CreateItineraryPage() {
   const { toast } = useToast();
   const [selectedDestinations, setSelectedDestinations] = useState([]);
   const [currentDestination, setCurrentDestination] = useState("");
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      const currentUser = data?.session?.user ?? null;
+      setUser(currentUser);
+      setLoading(false);
+      if (!currentUser) {
+        toast({
+          title: "Sign in required",
+          description: "Please sign in to create an itinerary",
+          variant: "destructive",
+        });
+        setLocation("/signin");
+      }
+    });
+  }, [setLocation, toast]);
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -90,11 +109,34 @@ export default function CreateItineraryPage() {
       return;
     }
 
+    if (!user) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to create an itinerary",
+        variant: "destructive",
+      });
+      setLocation("/signin");
+      return;
+    }
+
     createMutation.mutate({
       ...data,
+      userId: user.id,
       destinations: selectedDestinations,
     });
   };
+
+  if (loading) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="text-center">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8" data-testid="create-itinerary-page">
