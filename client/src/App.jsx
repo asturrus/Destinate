@@ -5,6 +5,15 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { Toaster } from "@/components/ui/toaster";
 import{ supabase } from "@/lib/supabaseClient";
 import { MapDialog } from "@/components/MapDialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Map, LogOut, User } from "lucide-react";
 import Home from "@/pages/Home";
 import Forum from "@/pages/Forum";
 import SignIn from "@/pages/SignIn";
@@ -82,16 +91,47 @@ export default function App() {
             <div className="flex items-center gap-4">
               <ThemeToggle />
               {user ? (
-                <button
-                  onClick={handleSignOut}
-                  className="w-10 h-10 flex items-center justify-center rounded-full bg-primary text-primary-foreground font-bold hover:opacity-80 transition"
-                  title="Sign Out"
-                >
-                  {initials}
-                </button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button
+                      className="w-10 h-10 flex items-center justify-center rounded-full bg-primary text-primary-foreground font-bold hover:opacity-80 transition"
+                      data-testid="button-account-menu"
+                    >
+                      {initials}
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuLabel className="font-normal">
+                      <div className="flex flex-col space-y-1">
+                        <p className="text-sm font-medium leading-none" data-testid="text-user-name">
+                          {user?.user_metadata?.full_name || "User"}
+                        </p>
+                        <p className="text-xs leading-none text-muted-foreground" data-testid="text-user-email">
+                          {user?.email}
+                        </p>
+                      </div>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link href="/itineraries" className="flex items-center cursor-pointer" data-testid="link-my-itineraries">
+                        <Map className="mr-2 h-4 w-4" />
+                        <span>My Itineraries</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem 
+                      onClick={handleSignOut}
+                      className="text-destructive focus:text-destructive cursor-pointer"
+                      data-testid="button-sign-out"
+                    >
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>Sign Out</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               ) : (
                 <Link href="/signin">
-                  <span className="text-sm font-medium text-primary hover:underline cursor-pointer">
+                  <span className="text-sm font-medium text-primary hover:underline cursor-pointer" data-testid="link-sign-in">
                     Sign In
                   </span>
                 </Link>

@@ -1,22 +1,67 @@
+import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Plus, Trash2, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function ItinerariesPage() {
   const { toast } = useToast();
+  const [, setLocation] = useLocation();
+  const [user, setUser] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      const currentUser = data?.session?.user ?? null;
+      setUser(currentUser);
+      setAuthLoading(false);
+      if (!currentUser) {
+        toast({
+          title: "Sign in required",
+          description: "Please sign in to view your itineraries",
+          variant: "destructive",
+        });
+        setLocation("/signin");
+      }
+    });
+  }, [setLocation, toast]);
 
   const { data: itineraries, isLoading } = useQuery({
-    queryKey: ['/api/itineraries'],
+    queryKey: ['/api/itineraries', user?.id],
+    queryFn: async () => {
+      if (!user?.id) return [];
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData?.session?.access_token;
+      const res = await fetch('/api/itineraries', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      if (!res.ok) throw new Error('Failed to fetch itineraries');
+      return res.json();
+    },
+    enabled: !!user?.id,
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (id) => apiRequest('DELETE', `/api/itineraries/${id}`),
+    mutationFn: async (id) => {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData?.session?.access_token;
+      const res = await fetch(`/api/itineraries/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      if (!res.ok) throw new Error('Failed to delete');
+      return res;
+    },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/itineraries'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/itineraries', user?.id] });
       toast({
         title: "Itinerary deleted",
         description: "Your itinerary has been removed.",
@@ -37,12 +82,16 @@ export default function ItinerariesPage() {
     }
   };
 
-  if (isLoading) {
+  if (authLoading || isLoading) {
     return (
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="text-center">Loading itineraries...</div>
+        <div className="text-center">Loading...</div>
       </div>
     );
+  }
+
+  if (!user) {
+    return null;
   }
 
   return (

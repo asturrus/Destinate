@@ -1,15 +1,13 @@
 import { type User, type InsertUser, type Itinerary, type InsertItinerary } from "@shared/schema";
 import { randomUUID } from "crypto";
 
-// modify the interface with any CRUD methods
-// you might need
-
 export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
   
   getItinerary(id: string): Promise<Itinerary | undefined>;
+  getItinerariesByUserId(userId: string): Promise<Itinerary[]>;
   getAllItineraries(): Promise<Itinerary[]>;
   createItinerary(itinerary: InsertItinerary): Promise<Itinerary>;
   deleteItinerary(id: string): Promise<boolean>;
@@ -49,10 +47,17 @@ export class MemStorage implements IStorage {
     return Array.from(this.itineraries.values());
   }
 
+  async getItinerariesByUserId(userId: string): Promise<Itinerary[]> {
+    return Array.from(this.itineraries.values()).filter(
+      (itinerary) => itinerary.userId === userId
+    );
+  }
+
   async createItinerary(insertItinerary: InsertItinerary): Promise<Itinerary> {
     const id = randomUUID();
     const itinerary: Itinerary = {
       id,
+      userId: insertItinerary.userId,
       title: insertItinerary.title,
       description: insertItinerary.description ?? null,
       destinations: insertItinerary.destinations as unknown,

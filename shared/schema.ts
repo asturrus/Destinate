@@ -19,6 +19,7 @@ export type User = typeof users.$inferSelect;
 
 export const itineraries = pgTable("itineraries", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
   title: text("title").notNull(),
   description: text("description"),
   destinations: jsonb("destinations").notNull(),
@@ -26,6 +27,7 @@ export const itineraries = pgTable("itineraries", {
 });
 
 export const insertItinerarySchema = createInsertSchema(itineraries).pick({
+  userId: true,
   title: true,
   description: true,
   destinations: true,

@@ -5,6 +5,7 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "../lib/supabaseClient";
+import { useToast } from "@/hooks/use-toast";
 import {
   Form,
   FormControl,
@@ -24,6 +25,7 @@ const signUpSchema = z.object({
 });
 
 export default function SignUp() {
+  const { toast } = useToast();
   const form = useForm({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -46,22 +48,33 @@ export default function SignUp() {
         password: data.password,
         options: {
           data: {
-            name: data.name, // store user's name in metadata
+            name: data.name,
           },
         },
       });
   
       if (error) {
         console.error("Sign up error:", error.message);
-        alert(`Error signing up: ${error.message}`);
+        toast({
+          title: "Sign up failed",
+          description: error.message,
+          variant: "destructive",
+        });
         return;
       }
   
       console.log("Supabase signup successful:", signUpData);
-      alert("Sign-up successful! Check your email to confirm your account.");
+      toast({
+        title: "Sign up successful!",
+        description: "Check your email to confirm your account.",
+      });
     } catch (error) {
       console.error("Unexpected error during sign up:", error);
-      alert(`Unexpected error: ${error.message}`);
+      toast({
+        title: "Unexpected error",
+        description: error.message,
+        variant: "destructive",
+      });
     }
   };
   
