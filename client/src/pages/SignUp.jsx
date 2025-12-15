@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "../lib/supabaseClient";
@@ -26,6 +26,7 @@ const signUpSchema = z.object({
 
 export default function SignUp() {
   const { toast } = useToast();
+  const [, setLocation] = useLocation();
   const form = useForm({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -68,6 +69,7 @@ export default function SignUp() {
         title: "Sign up successful!",
         description: "Check your email to confirm your account.",
       });
+      setLocation("/signin");
     } catch (error) {
       console.error("Unexpected error during sign up:", error);
       toast({
