@@ -11,25 +11,6 @@ export function ForumHero() {
   return (
     <section className="bg-indigo-600 text-white py-20 px-6 text-center rounded-b-2xl shadow-md" data-testid="forum-hero">
       {/* Title */}
-      <h2 className="text-2xl md:text-3xl font-bold mb-6">
-        Search for Places
-      </h2>
-
-      {/* Search bar */}
-      <div className="flex justify-center items-center gap-2 max-w-md mx-auto">
-        <input
-          data-testid="search-input"
-          type="text"
-          placeholder="Find a place"
-          className="w-full px-4 py-2 rounded-lg border border-gray-200 text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-        />
-        <button 
-          data-testid="search-button"
-          className="px-4 py-2 bg-yellow-400 text-black font-semibold rounded-lg shadow hover:bg-yellow-300 transition"
-        >
-          Enter
-        </button>
-      </div>
 
       {/*Popular Destinations*/}
       <div className="py-20 px-6">
