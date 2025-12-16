@@ -65,13 +65,23 @@ export function DiscussionPage({ discussion, onBack }) {
       // Get current user
       const { data: { user } } = await supabase.auth.getUser();
 
+      // Determine author name based on authentication status
+      let authorName = "Guest";
+      if (user) {
+        // Try to get name from user metadata, email, or fallback to "User"
+        authorName = user.user_metadata?.name || 
+                     user.user_metadata?.full_name ||
+                     user.email?.split('@')[0] || 
+                     "User";
+      }
+
       // Insert reply into Supabase
       const { data, error } = await supabase
         .from('replies')
         .insert([
           {
             discussion_id: discussion.id,
-            author: user?.email?.split('@')[0] || "Anonymous", // Use email username or "Anonymous"
+            author: authorName,
             text: newReply.trim(),
             user_id: user?.id || null
           }
