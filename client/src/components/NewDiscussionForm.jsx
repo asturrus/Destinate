@@ -2,7 +2,6 @@ import { useState } from "react";
 
 export function NewDiscussionForm({ onAddDiscussion }) {
   const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
   const [body, setBody] = useState("");
 
   const handleSubmit = (e) => {
@@ -11,14 +10,12 @@ export function NewDiscussionForm({ onAddDiscussion }) {
 
     const newDiscussion = {
       title: title.trim(),
-      author: author.trim(),
       body: body.trim(),
     };
 
     onAddDiscussion(newDiscussion);
 
     setTitle("");
-    setAuthor("");
     setBody("");
   };
 
@@ -39,16 +36,6 @@ export function NewDiscussionForm({ onAddDiscussion }) {
         placeholder="Discussion title"
         className="w-full px-4 py-2 mb-2 border rounded dark:bg-gray-700 dark:text-white dark:border-gray-600"
         data-testid="input-discussion-title"
-        required
-      />
-      
-      <input
-        type="text"
-        value={author}
-        onChange={(e) => setAuthor(e.target.value)}
-        placeholder="Your name"
-        className="w-full px-4 py-2 mb-2 border rounded dark:bg-gray-700 dark:text-white dark:border-gray-600"
-        data-testid="input-discussion-author"
         required
       />
       
