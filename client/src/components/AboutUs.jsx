@@ -43,6 +43,30 @@ export function AboutUs() {
               Frontend contributions, loves playing guitar and being a full time dad!
               </p>
             </div>
+                        <div data-testid="team-member-christopher">
+              <p className="font-semibold">Christopher Contreras (Class of 2025)</p>
+              <p className="text-muted-foreground text-sm">
+              From the Stock Predictor Team!
+              </p>
+            </div>
+            <div data-testid="team-member-richard">
+              <p className="font-semibold">Richard Nguyen (Class of 2025)</p>
+              <p className="text-muted-foreground text-sm">
+              From the Stock Predictor Team!
+              </p>
+            </div>
+            <div data-testid="team-member-alex">
+              <p className="font-semibold">Alex Martinez (Class of 2025)</p>
+              <p className="text-muted-foreground text-sm">
+              From the Stock Predictor Team!
+              </p>
+            </div>
+            <div data-testid="team-member-rocco">
+              <p className="font-semibold">Rocco Catalsan (Class of 2025)</p>
+              <p className="text-muted-foreground text-sm">
+              From the Stock Predictor Team!
+              </p>
+            </div>
           </div>
         </div>
 
