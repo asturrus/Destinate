@@ -1,0 +1,12 @@
+dotenv==0.9.9
+Flask==3.1.2
+Flask-Cors==6.0.1
+matplotlib==3.10.7
+numpy==2.3.4
+pandas==2.3.3
+python-dateutil==2.8.2
+python-dotenv==1.0.0
+python-json-logger==2.0.7
+requests==2.31.0
+scikit-learn==1.7.2
+yfinance==0.2.66

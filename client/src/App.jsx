@@ -22,6 +22,7 @@ import ForgotPassword from "@/pages/ForgotPassword";
 import ItinerariesPage from "@/pages/ItinerariesPage";
 import CreateItineraryPage from "@/pages/CreateItineraryPage";
 import ItineraryDetailPage from "@/pages/ItineraryDetailPage";
+import StockManagement from "@/pages/StockManagement";
 
 function Router({ onOpenMap }) {
   return (
@@ -34,7 +35,7 @@ function Router({ onOpenMap }) {
       <Route path="/itineraries" component={ItinerariesPage} />
       <Route path="/itineraries/create" component={CreateItineraryPage} />
       <Route path="/itineraries/:id" component={ItineraryDetailPage} />
-      <Route path="/stock-management"/>
+      <Route path="/stock-management" component={StockManagement} />
       {/* Future routes can be added here */}
     </Switch>
   );
