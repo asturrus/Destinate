@@ -6,7 +6,7 @@ export function NewDiscussionForm({ onAddDiscussion }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!title.trim() || !author.trim()) return;
+    if (!title.trim()) return;
 
     const newDiscussion = {
       title: title.trim(),
