@@ -332,6 +332,69 @@ function StockManagement() {
                 </pre>
               </div>
             </details>
+
+            {/* Trading Recommendation */}
+            {apiResponse?.predictions?.length > 1 && (() => {
+              const points = apiResponse.predictions;
+              const predictionPoint = points[points.length - 1];
+              const lastHistoricalPoint = points[points.length - 2];
+              
+              if (!predictionPoint || !lastHistoricalPoint) return null;
+              
+              const currentPrice = lastHistoricalPoint.predicted_price;
+              const forecastPrice = predictionPoint.predicted_price;
+              const priceChange = forecastPrice - currentPrice;
+              const percentChange = (priceChange / currentPrice) * 100;
+              
+              // Determine recommendation based on price trend
+              let recommendation = "HOLD";
+              let recommendationColor = "text-yellow-600 dark:text-yellow-400";
+              let bgColor = "bg-yellow-500/10";
+              let borderColor = "border-yellow-500/30";
+              let explanation = "Price forecast shows minimal movement. Consider holding your position.";
+              let icon = "⏸️";
+              
+              if (percentChange > 2) {
+                recommendation = "BUY";
+                recommendationColor = "text-emerald-600 dark:text-emerald-400";
+                bgColor = "bg-emerald-500/10";
+                borderColor = "border-emerald-500/30";
+                explanation = `Price is forecasted to increase by ${fmt(percentChange)}%. This suggests a buying opportunity.`;
+                icon = "📈";
+              } else if (percentChange < -2) {
+                recommendation = "SELL";
+                recommendationColor = "text-red-600 dark:text-red-400";
+                bgColor = "bg-red-500/10";
+                borderColor = "border-red-500/30";
+                explanation = `Price is forecasted to decrease by ${fmt(Math.abs(percentChange))}%. Consider selling or avoiding this position.`;
+                icon = "📉";
+              }
+              
+              return (
+                <div className={`mt-4 rounded-xl border ${borderColor} ${bgColor} p-4`}>
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-2xl">{icon}</span>
+                      <h4 className="font-semibold text-foreground">Trading Recommendation</h4>
+                    </div>
+                    <span className={`text-2xl font-bold ${recommendationColor}`}>
+                      {recommendation}
+                    </span>
+                  </div>
+                  <p className="text-sm text-foreground mb-3">{explanation}</p>
+                  <div className="text-xs text-muted-foreground space-y-1 mb-3">
+                    <p>• Current Price: ${fmt(currentPrice)}</p>
+                    <p>• Forecast Price: ${fmt(forecastPrice)}</p>
+                    <p>• Expected Change: {priceChange >= 0 ? "+" : ""}{fmt(priceChange)} ({priceChange >= 0 ? "+" : ""}{fmt(percentChange)}%)</p>
+                  </div>
+                  <div className="pt-3 border-t border-border">
+                    <p className="text-xs text-muted-foreground italic">
+                      ⚠️ This is an algorithmic suggestion based on ML forecasts. Always conduct your own research and consider your risk tolerance before making investment decisions.
+                    </p>
+                  </div>
+                </div>
+              );
+            })()}
           </article>
 
           {/* Overview */}
