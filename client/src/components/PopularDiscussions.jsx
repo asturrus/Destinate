@@ -22,7 +22,7 @@ export function PopularDiscussions() {
 
       const { data, error } = await supabase
         .from('discussions')
-      .select(`
+        .select(`
           *,
           replies:replies(count)
         `)
@@ -60,8 +60,15 @@ export function PopularDiscussions() {
 
   const addDiscussion = async (newDiscussion) => {
     try {
-      // Get current user
       const { data: { user } } = await supabase.auth.getUser();
+
+      let authorName = "Guest";
+      if (user) {
+        authorName = user.user_metadata?.name || 
+                     user.user_metadata?.full_name ||
+                     user.email?.split('@')[0] || 
+                     "User";
+      }
 
       // Insert into Supabase
       const { data, error } = await supabase
@@ -69,7 +76,7 @@ export function PopularDiscussions() {
         .insert([
           {
             title: newDiscussion.title,
-            author: newDiscussion.author,
+            author: authorName,
             body: newDiscussion.body || '',
             user_id: user?.id || null
           }
